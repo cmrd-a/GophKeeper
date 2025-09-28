@@ -1,14 +1,22 @@
-dev-deps:
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-
+.PHONY: gen mod build lint check buf-dep
 gen:
-	protoc --go_out=pb --go_opt=paths=source_relative --go-grpc_out=pb --go-grpc_opt=paths=source_relative proto/keeper.proto
+	buf generate
+# 	protoc \
+# 	--go_out=pb \
+# 	--go_opt=paths=source_relative \
+# 	--go-grpc_out=pb \
+# 	--go-grpc_opt=paths=source_relative \
+# 	--grpc-gateway_out=pb \
+#     --grpc-gateway_opt paths=source_relative \
+#     --grpc-gateway_opt generate_unbound_methods=true \
+# 	--openapiv2_out ./pb/openapiv2 \
+# 	proto/keeper.proto
 
-tidy:
+mod:
 	go mod tidy
+	go install tool
 
-build: tidy
+build: mod
 	go build -o bin/client ./cmd/client
 	go build -o bin/server ./cmd/server
 
@@ -16,3 +24,6 @@ lint:
 	golangci-lint run ./... --fix
 
 check: build lint 
+
+buf-dep:
+	buf dep update

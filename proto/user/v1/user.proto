@@ -1,0 +1,25 @@
+syntax = "proto3";
+package proto.user.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/cmrd-a/GophKeeper/gen/go/proto/user/v1;userv1";
+
+// UserService service definition
+service UserService {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/echo"
+      body: "*"
+    };
+  }
+}
+
+message EchoRequest {
+  string in = 1;
+}
+
+
+message EchoResponse {
+  string out = 1;
+}
