@@ -5,7 +5,7 @@ export
 
 gen:
 	buf generate
-	sh generate-swagger-ui.sh
+	# sh generate-swagger-ui.sh
 
 mod:
 	go mod tidy

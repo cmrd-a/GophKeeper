@@ -104,7 +104,7 @@ func (x *GetLoginPasswordsResponse) GetLoginPasswords() []*GetLoginPasswordsResp
 
 type SaveLoginPasswordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	Login         string                 `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
 	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -142,8 +142,8 @@ func (*SaveLoginPasswordRequest) Descriptor() ([]byte, []int) {
 }
 
 func (x *SaveLoginPasswordRequest) GetId() string {
-	if x != nil {
-		return x.Id
+	if x != nil && x.Id != nil {
+		return *x.Id
 	}
 	return ""
 }
@@ -340,11 +340,12 @@ const file_proto_v1_vault_vault_proto_rawDesc = "" +
 	"\x0flogin_passwords\x18\x01 \x03(\v21.v1.vault.GetLoginPasswordsResponse.LoginPasswordR\x0eloginPasswords\x1aA\n" +
 	"\rLoginPassword\x12\x14\n" +
 	"\x05login\x18\x01 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\\\n" +
-	"\x18SaveLoginPasswordRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"h\n" +
+	"\x18SaveLoginPasswordRequest\x12\x13\n" +
+	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x14\n" +
 	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"\x1b\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpasswordB\x05\n" +
+	"\x03_id\"\x1b\n" +
 	"\x19SaveLoginPasswordResponse\",\n" +
 	"\x1aDeleteLoginPasswordRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"\x1d\n" +
@@ -396,6 +397,7 @@ func file_proto_v1_vault_vault_proto_init() {
 	if File_proto_v1_vault_vault_proto != nil {
 		return
 	}
+	file_proto_v1_vault_vault_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

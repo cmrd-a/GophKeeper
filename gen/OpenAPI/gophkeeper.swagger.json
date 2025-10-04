@@ -223,7 +223,7 @@
     "userLoginRequest": {
       "type": "object",
       "properties": {
-        "email": {
+        "login": {
           "type": "string"
         },
         "password": {
@@ -242,7 +242,7 @@
     "userRegisterRequest": {
       "type": "object",
       "properties": {
-        "email": {
+        "login": {
           "type": "string"
         },
         "password": {
@@ -251,12 +251,7 @@
       }
     },
     "userRegisterResponse": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
     "vaultDeleteLoginPasswordRequest": {
       "type": "object",

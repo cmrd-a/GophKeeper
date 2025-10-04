@@ -39,7 +39,7 @@ message GetLoginPasswordsResponse {
 }
 
 message SaveLoginPasswordRequest {
-    string id = 1;
+    optional string id = 1;
     string login = 2;
     string password = 3;
 }

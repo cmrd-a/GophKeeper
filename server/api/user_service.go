@@ -17,10 +17,9 @@ type UserServer struct {
 
 // Register implements EchoHandlerServer.Echo.
 func (s *UserServer) Register(_ context.Context, in *user.RegisterRequest) (*user.RegisterResponse, error) {
-	email := in.GetEmail()
-	password := in.GetPassword()
-	log.Printf("email: %v", email)
-	log.Printf("password: %v", password)
+	login := in.GetLogin()
+	log.Printf("login: %v", login)
+	log.Print("password: ***")
 	r, err := repository.NewRepository(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		return nil, err

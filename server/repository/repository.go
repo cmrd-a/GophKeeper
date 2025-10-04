@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"os"
-	"fmt"
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -22,7 +22,7 @@ func NewRepository(ctx context.Context, dsn string) (*Repository, error) {
 	return r, nil
 }
 
-func (r *Repository) InsertUser(user_id string) error {
+func (r *Repository) InsertUser(login string) error {
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
@@ -30,14 +30,13 @@ func (r *Repository) InsertUser(user_id string) error {
 	}
 	defer conn.Close(context.Background())
 
-	var name string
-	var weight int64
-	err = conn.QueryRow(context.Background(), "select name, weight from widgets where id=$1", 42).Scan(&name, &weight)
+	var id string
+	err = conn.QueryRow(context.Background(), "SELECT password FROM \"user\" WHERE login=$1", login).Scan(&id)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Println(name, weight)
+	fmt.Println(id)
 	return nil
 }
