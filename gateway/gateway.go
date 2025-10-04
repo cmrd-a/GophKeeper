@@ -12,9 +12,10 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/cmrd-a/GophKeeper/gen/go/proto/user/v1"
+	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
+	"github.com/cmrd-a/GophKeeper/gen/proto/v1/vault"
 	"github.com/cmrd-a/GophKeeper/insecure"
-	"github.com/cmrd-a/GophKeeper/thirdparty"
+	"github.com/cmrd-a/GophKeeper/gen"
 
 	"io/fs"
 	"mime"
@@ -50,7 +51,12 @@ func Run(dialAddr string) error {
 	}
 
 	gwmux := runtime.NewServeMux()
-	err = pb.RegisterUserServiceHandler(context.Background(), gwmux, conn)
+	err = user.RegisterUserServiceHandler(context.Background(), gwmux, conn)
+	if err != nil {
+		return fmt.Errorf("failed to register gateway: %w", err)
+	}
+	
+	err = vault.RegisterVaultServiceHandler(context.Background(), gwmux, conn)
 	if err != nil {
 		return fmt.Errorf("failed to register gateway: %w", err)
 	}

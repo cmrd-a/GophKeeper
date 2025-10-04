@@ -1,16 +1,11 @@
-.PHONY: gen mod build lint check buf-dep
+.PHONY: gen mod build run lint check buf-dep
+	
+include .env
+export
+
 gen:
 	buf generate
-# 	protoc \
-# 	--go_out=pb \
-# 	--go_opt=paths=source_relative \
-# 	--go-grpc_out=pb \
-# 	--go-grpc_opt=paths=source_relative \
-# 	--grpc-gateway_out=pb \
-#     --grpc-gateway_opt paths=source_relative \
-#     --grpc-gateway_opt generate_unbound_methods=true \
-# 	--openapiv2_out ./pb/openapiv2 \
-# 	proto/keeper.proto
+	sh generate-swagger-ui.sh
 
 mod:
 	go mod tidy
@@ -19,6 +14,9 @@ mod:
 build: mod
 	go build -o bin/client ./cmd/client
 	go build -o bin/server ./cmd/server
+
+run: build
+	bin/server
 
 lint:
 	golangci-lint run ./... --fix

@@ -1,0 +1,53 @@
+syntax = "proto3";
+package v1.vault;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/cmrd-a/GophKeeper/gen/proto/v1/vault;vault";
+
+// VaultService service definition
+service VaultService {
+  rpc GetLoginPasswords(GetLoginPasswordsRequest) returns (GetLoginPasswordsResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/get-login-passwords"
+      body: "*"
+    };
+  };
+  rpc SaveLoginPassword(SaveLoginPasswordRequest) returns (SaveLoginPasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/save-login-password"
+      body: "*"
+    };
+  };
+  rpc DeleteLoginPassword(DeleteLoginPasswordRequest) returns (DeleteLoginPasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/delete-login-password"
+      body: "*"
+    };
+  };
+}
+
+message GetLoginPasswordsRequest {}
+
+message GetLoginPasswordsResponse {
+    repeated LoginPassword login_passwords = 1;
+    
+    message LoginPassword {
+        string login = 1;
+        string password = 2;
+    }
+}
+
+message SaveLoginPasswordRequest {
+    string id = 1;
+    string login = 2;
+    string password = 3;
+}
+
+message SaveLoginPasswordResponse {}
+
+message DeleteLoginPasswordRequest {
+    string id = 1;
+}
+
+message DeleteLoginPasswordResponse {}

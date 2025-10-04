@@ -1,0 +1,40 @@
+syntax = "proto3";
+package v1.user;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/cmrd-a/GophKeeper/gen/proto/v1/user;user";
+
+// UserService service definition
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/register"
+      body: "*"
+    };
+  };
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/login"
+      body: "*"
+    };
+  };
+}
+
+message RegisterRequest{
+    string email = 1;
+    string password = 2;
+}
+
+message RegisterResponse{
+    string user_id = 1;
+}
+
+message LoginRequest{
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse{
+    string token = 1;
+}

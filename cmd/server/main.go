@@ -7,11 +7,12 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	pb "github.com/cmrd-a/GophKeeper/gen/go/proto/user/v1"
+	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
+	"github.com/cmrd-a/GophKeeper/gen/proto/v1/vault"
 	"github.com/cmrd-a/GophKeeper/insecure"
 
 	"github.com/cmrd-a/GophKeeper/gateway"
-	"github.com/cmrd-a/GophKeeper/server"
+	"github.com/cmrd-a/GophKeeper/server/api"
 
 	"google.golang.org/grpc/credentials"
 )
@@ -25,7 +26,8 @@ func main() {
 	}
 
 	s := grpc.NewServer(grpc.Creds(credentials.NewServerTLSFromCert(&insecure.Cert)))
-	pb.RegisterUserServiceServer(s, &server.Server{})
+	user.RegisterUserServiceServer(s, &api.UserServer{})
+	vault.RegisterVaultServiceServer(s, &api.VaultServer{})
 	reflection.Register(s)
 
 	log.Printf("Serving gRPC on https://%s", addr)
