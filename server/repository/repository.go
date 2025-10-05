@@ -31,7 +31,7 @@ func (r *Repository) InsertUser(login string) error {
 	defer conn.Close(context.Background())
 
 	var id string
-	err = conn.QueryRow(context.Background(), "SELECT password FROM \"user\" WHERE login=$1", login).Scan(&id)
+	err = conn.QueryRow(context.Background(), "SELECT login FROM \"user\" WHERE login=$1", login).Scan(&id)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 		os.Exit(1)

@@ -15,7 +15,7 @@ import (
 	thirdparty "github.com/cmrd-a/GophKeeper/gen"
 	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
 	"github.com/cmrd-a/GophKeeper/gen/proto/v1/vault"
-	"github.com/cmrd-a/GophKeeper/insecure"
+	"github.com/cmrd-a/GophKeeper/server/insecure"
 
 	"io/fs"
 	"mime"

@@ -9,10 +9,10 @@ import (
 
 	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
 	"github.com/cmrd-a/GophKeeper/gen/proto/v1/vault"
-	"github.com/cmrd-a/GophKeeper/insecure"
+	"github.com/cmrd-a/GophKeeper/server/insecure"
 
-	"github.com/cmrd-a/GophKeeper/gateway"
 	"github.com/cmrd-a/GophKeeper/server/api"
+	"github.com/cmrd-a/GophKeeper/server/gateway"
 
 	"google.golang.org/grpc/credentials"
 )
