@@ -5,13 +5,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
-
 	"google.golang.org/grpc"
-
-	"github.com/cmrd-a/GophKeeper/server/insecure"
-
 	"google.golang.org/grpc/credentials"
+
+	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
+	"github.com/cmrd-a/GophKeeper/server/insecure"
 )
 
 func main() {
