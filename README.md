@@ -7,3 +7,10 @@ Yandex Practicum Go Advanced Graduate Work
 - https://golangci-lint.run/docs/welcome/install/
 - https://github.com/bufbuild/buf
 - make dev-deps
+
+# TODO:
+- [ ] server docker
+- [ ] Тесты
+- [ ] github actions
+- [ ] readme, описание репо, инструкции
+- [ ] подправить конфиг по умолчанию

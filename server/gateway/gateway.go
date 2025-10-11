@@ -37,11 +37,11 @@ func getOpenAPIHandler() http.Handler {
 }
 
 // Run runs the gRPC-Gateway, dialling the provided address.
-func Run(dialAddr string) error {
+func Run(dialAddr string, HTTPPort int16) error {
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
 	conn, err := grpc.NewClient(
-		dialAddr,
+		"dns:///"+dialAddr,
 		grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(insecure.CertPool, "")),
 	)
 	if err != nil {
@@ -61,7 +61,7 @@ func Run(dialAddr string) error {
 
 	oa := getOpenAPIHandler()
 
-	gatewayAddr := "0.0.0.0:8080"
+	gatewayAddr := fmt.Sprintf("0.0.0.0:%d", HTTPPort)
 	gwServer := &http.Server{
 		Addr: gatewayAddr,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
