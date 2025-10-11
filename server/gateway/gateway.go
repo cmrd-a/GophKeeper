@@ -2,9 +2,9 @@ package gateway
 
 import (
 	"context"
+	"log/slog"
 
 	"fmt"
-	"log"
 
 	"net/http"
 
@@ -37,7 +37,7 @@ func getOpenAPIHandler() http.Handler {
 }
 
 // Run runs the gRPC-Gateway, dialling the provided address.
-func Run(dialAddr string, HTTPPort int16) error {
+func Run(log *slog.Logger, dialAddr string, HTTPPort int16) error {
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
 	conn, err := grpc.NewClient(
@@ -74,7 +74,7 @@ func Run(dialAddr string, HTTPPort int16) error {
 	}
 	// Empty parameters mean use the TLS Config specified with the server.
 	// if strings.ToLower(os.Getenv("SERVE_HTTP")) == "true" {
-	log.Println("Serving gRPC-Gateway and OpenAPI Documentation on http://", gatewayAddr)
+	log.Info("Serving gRPC-Gateway and OpenAPI Documentation on ", "addres", "http://"+gatewayAddr)
 	return fmt.Errorf("serving gRPC-Gateway server: %w", gwServer.ListenAndServe())
 	// }
 

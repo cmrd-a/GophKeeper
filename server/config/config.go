@@ -10,12 +10,15 @@ import (
 )
 
 type Config struct {
-	LogLevel    string `mapstructure:"LOG_LEVEL"`
-	GRPCPort    int16  `mapstructure:"GRPC_PORT"`
-	HTTPPort    int16  `mapstructure:"HTTP_PORT"`
-	DatabaseURI string `mapstructure:"DATABASE_URI"`
-	SaltSecret  string `mapstructure:"SALT_SECRET"`
-	JWTSecret   string `mapstructure:"JWT_SECRET"`
+	LogLevel          string `mapstructure:"LOG_LEVEL"`
+	GRPCPort          int16  `mapstructure:"GRPC_PORT"`
+	HTTPPort          int16  `mapstructure:"HTTP_PORT"`
+	DatabaseURI       string `mapstructure:"DATABASE_URI"`
+	SaltSecret        string `mapstructure:"SALT_SECRET"`
+	JWTSecret         string `mapstructure:"JWT_SECRET"`
+	LogGRPCRequests   bool   `mapstructure:"LOG_GRPC_REQUESTS"`
+	LogGRPCPayloads   bool   `mapstructure:"LOG_GRPC_PAYLOADS"`
+	MaxLogPayloadSize int    `mapstructure:"MAX_LOG_PAYLOAD_SIZE"`
 }
 
 func NewConfig(log *slog.Logger, lvl *slog.LevelVar) (*Config, error) {
@@ -26,9 +29,16 @@ func NewConfig(log *slog.Logger, lvl *slog.LevelVar) (*Config, error) {
 	viper.SetDefault("SALT_SECRET", "changeme")
 	viper.SetDefault("JWT_SECRET", "changeme")
 
+	viper.SetDefault("LOG_GRPC_REQUESTS", true)
+	viper.SetDefault("LOG_GRPC_PAYLOADS", false)
+	viper.SetDefault("MAX_LOG_PAYLOAD_SIZE", 1000)
+
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("../../.")
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("./")
+	viper.AddConfigPath("../")
+	viper.AddConfigPath("../../")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {

@@ -83,14 +83,14 @@
         ]
       }
     },
-    "/api/v1/vault/delete-login-password": {
+    "/api/v1/vault/binary": {
       "post": {
-        "operationId": "VaultService_DeleteLoginPassword",
+        "operationId": "VaultService_SaveBinaryData",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/vaultDeleteLoginPasswordResponse"
+              "$ref": "#/definitions/vaultSaveBinaryDataResponse"
             }
           },
           "default": {
@@ -106,7 +106,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/vaultDeleteLoginPasswordRequest"
+              "$ref": "#/definitions/vaultSaveBinaryDataRequest"
             }
           }
         ],
@@ -115,14 +115,14 @@
         ]
       }
     },
-    "/api/v1/vault/get-login-passwords": {
+    "/api/v1/vault/card": {
       "post": {
-        "operationId": "VaultService_GetLoginPasswords",
+        "operationId": "VaultService_SaveCardData",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/vaultGetLoginPasswordsResponse"
+              "$ref": "#/definitions/vaultSaveCardDataResponse"
             }
           },
           "default": {
@@ -138,7 +138,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/vaultGetLoginPasswordsRequest"
+              "$ref": "#/definitions/vaultSaveCardDataRequest"
             }
           }
         ],
@@ -147,7 +147,65 @@
         ]
       }
     },
-    "/api/v1/vault/save-login-password": {
+    "/api/v1/vault/item/{id}": {
+      "delete": {
+        "operationId": "VaultService_DeleteVaultItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/vaultDeleteVaultItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "VaultService"
+        ]
+      }
+    },
+    "/api/v1/vault/items": {
+      "get": {
+        "operationId": "VaultService_GetVaultItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/vaultGetVaultItemsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "VaultService"
+        ]
+      }
+    },
+    "/api/v1/vault/login-password": {
       "post": {
         "operationId": "VaultService_SaveLoginPassword",
         "responses": {
@@ -178,20 +236,73 @@
           "VaultService"
         ]
       }
+    },
+    "/api/v1/vault/meta": {
+      "post": {
+        "operationId": "VaultService_SaveMeta",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/vaultSaveMetaResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/vaultSaveMetaRequest"
+            }
+          }
+        ],
+        "tags": [
+          "VaultService"
+        ]
+      }
+    },
+    "/api/v1/vault/text": {
+      "post": {
+        "operationId": "VaultService_SaveTextData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/vaultSaveTextDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/vaultSaveTextDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "VaultService"
+        ]
+      }
     }
   },
   "definitions": {
-    "GetLoginPasswordsResponseLoginPassword": {
-      "type": "object",
-      "properties": {
-        "login": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -253,37 +364,85 @@
     "userRegisterResponse": {
       "type": "object"
     },
-    "vaultDeleteLoginPasswordRequest": {
+    "vaultBinaryData": {
       "type": "object",
       "properties": {
-        "id": {
+        "base": {
+          "$ref": "#/definitions/vaultVaultItem"
+        },
+        "data": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "vaultCardData": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "$ref": "#/definitions/vaultVaultItem"
+        },
+        "number": {
+          "type": "string"
+        },
+        "holder": {
+          "type": "string"
+        },
+        "expire": {
+          "type": "string"
+        },
+        "cvv": {
           "type": "string"
         }
       }
     },
-    "vaultDeleteLoginPasswordResponse": {
+    "vaultDeleteVaultItemResponse": {
       "type": "object"
     },
-    "vaultGetLoginPasswordsRequest": {
-      "type": "object"
-    },
-    "vaultGetLoginPasswordsResponse": {
+    "vaultGetVaultItemsResponse": {
       "type": "object",
       "properties": {
         "loginPasswords": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/GetLoginPasswordsResponseLoginPassword"
+            "$ref": "#/definitions/vaultLoginPassword"
+          }
+        },
+        "textData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/vaultTextData"
+          }
+        },
+        "binaryData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/vaultBinaryData"
+          }
+        },
+        "cardData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/vaultCardData"
+          }
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/vaultMeta"
           }
         }
       }
     },
-    "vaultSaveLoginPasswordRequest": {
+    "vaultLoginPassword": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string"
+        "base": {
+          "$ref": "#/definitions/vaultVaultItem"
         },
         "login": {
           "type": "string"
@@ -293,8 +452,144 @@
         }
       }
     },
+    "vaultMeta": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "$ref": "#/definitions/vaultVaultItem"
+        },
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "itemId": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultSaveBinaryDataRequest": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "vaultSaveBinaryDataResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultSaveCardDataRequest": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "holder": {
+          "type": "string"
+        },
+        "expire": {
+          "type": "string"
+        },
+        "cvv": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultSaveCardDataResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultSaveLoginPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
     "vaultSaveLoginPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultSaveMetaRequest": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/vaultMeta"
+          }
+        }
+      }
+    },
+    "vaultSaveMetaResponse": {
       "type": "object"
+    },
+    "vaultSaveTextDataRequest": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultSaveTextDataResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultTextData": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "$ref": "#/definitions/vaultVaultItem"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "vaultVaultItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
     }
   }
 }

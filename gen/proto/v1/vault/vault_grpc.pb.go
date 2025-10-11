@@ -8,7 +8,6 @@ package vault
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,9 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	VaultService_GetLoginPasswords_FullMethodName   = "/v1.vault.VaultService/GetLoginPasswords"
-	VaultService_SaveLoginPassword_FullMethodName   = "/v1.vault.VaultService/SaveLoginPassword"
-	VaultService_DeleteLoginPassword_FullMethodName = "/v1.vault.VaultService/DeleteLoginPassword"
+	VaultService_GetVaultItems_FullMethodName     = "/v1.vault.VaultService/GetVaultItems"
+	VaultService_SaveLoginPassword_FullMethodName = "/v1.vault.VaultService/SaveLoginPassword"
+	VaultService_SaveTextData_FullMethodName      = "/v1.vault.VaultService/SaveTextData"
+	VaultService_SaveBinaryData_FullMethodName    = "/v1.vault.VaultService/SaveBinaryData"
+	VaultService_SaveCardData_FullMethodName      = "/v1.vault.VaultService/SaveCardData"
+	VaultService_SaveMeta_FullMethodName          = "/v1.vault.VaultService/SaveMeta"
+	VaultService_DeleteVaultItem_FullMethodName   = "/v1.vault.VaultService/DeleteVaultItem"
 )
 
 // VaultServiceClient is the client API for VaultService service.
@@ -31,9 +34,13 @@ const (
 //
 // VaultService service definition
 type VaultServiceClient interface {
-	GetLoginPasswords(ctx context.Context, in *GetLoginPasswordsRequest, opts ...grpc.CallOption) (*GetLoginPasswordsResponse, error)
+	GetVaultItems(ctx context.Context, in *GetVaultItemsRequest, opts ...grpc.CallOption) (*GetVaultItemsResponse, error)
 	SaveLoginPassword(ctx context.Context, in *SaveLoginPasswordRequest, opts ...grpc.CallOption) (*SaveLoginPasswordResponse, error)
-	DeleteLoginPassword(ctx context.Context, in *DeleteLoginPasswordRequest, opts ...grpc.CallOption) (*DeleteLoginPasswordResponse, error)
+	SaveTextData(ctx context.Context, in *SaveTextDataRequest, opts ...grpc.CallOption) (*SaveTextDataResponse, error)
+	SaveBinaryData(ctx context.Context, in *SaveBinaryDataRequest, opts ...grpc.CallOption) (*SaveBinaryDataResponse, error)
+	SaveCardData(ctx context.Context, in *SaveCardDataRequest, opts ...grpc.CallOption) (*SaveCardDataResponse, error)
+	SaveMeta(ctx context.Context, in *SaveMetaRequest, opts ...grpc.CallOption) (*SaveMetaResponse, error)
+	DeleteVaultItem(ctx context.Context, in *DeleteVaultItemRequest, opts ...grpc.CallOption) (*DeleteVaultItemResponse, error)
 }
 
 type vaultServiceClient struct {
@@ -44,10 +51,10 @@ func NewVaultServiceClient(cc grpc.ClientConnInterface) VaultServiceClient {
 	return &vaultServiceClient{cc}
 }
 
-func (c *vaultServiceClient) GetLoginPasswords(ctx context.Context, in *GetLoginPasswordsRequest, opts ...grpc.CallOption) (*GetLoginPasswordsResponse, error) {
+func (c *vaultServiceClient) GetVaultItems(ctx context.Context, in *GetVaultItemsRequest, opts ...grpc.CallOption) (*GetVaultItemsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetLoginPasswordsResponse)
-	err := c.cc.Invoke(ctx, VaultService_GetLoginPasswords_FullMethodName, in, out, cOpts...)
+	out := new(GetVaultItemsResponse)
+	err := c.cc.Invoke(ctx, VaultService_GetVaultItems_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,10 +71,50 @@ func (c *vaultServiceClient) SaveLoginPassword(ctx context.Context, in *SaveLogi
 	return out, nil
 }
 
-func (c *vaultServiceClient) DeleteLoginPassword(ctx context.Context, in *DeleteLoginPasswordRequest, opts ...grpc.CallOption) (*DeleteLoginPasswordResponse, error) {
+func (c *vaultServiceClient) SaveTextData(ctx context.Context, in *SaveTextDataRequest, opts ...grpc.CallOption) (*SaveTextDataResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteLoginPasswordResponse)
-	err := c.cc.Invoke(ctx, VaultService_DeleteLoginPassword_FullMethodName, in, out, cOpts...)
+	out := new(SaveTextDataResponse)
+	err := c.cc.Invoke(ctx, VaultService_SaveTextData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vaultServiceClient) SaveBinaryData(ctx context.Context, in *SaveBinaryDataRequest, opts ...grpc.CallOption) (*SaveBinaryDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SaveBinaryDataResponse)
+	err := c.cc.Invoke(ctx, VaultService_SaveBinaryData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vaultServiceClient) SaveCardData(ctx context.Context, in *SaveCardDataRequest, opts ...grpc.CallOption) (*SaveCardDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SaveCardDataResponse)
+	err := c.cc.Invoke(ctx, VaultService_SaveCardData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vaultServiceClient) SaveMeta(ctx context.Context, in *SaveMetaRequest, opts ...grpc.CallOption) (*SaveMetaResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SaveMetaResponse)
+	err := c.cc.Invoke(ctx, VaultService_SaveMeta_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vaultServiceClient) DeleteVaultItem(ctx context.Context, in *DeleteVaultItemRequest, opts ...grpc.CallOption) (*DeleteVaultItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteVaultItemResponse)
+	err := c.cc.Invoke(ctx, VaultService_DeleteVaultItem_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,9 +127,13 @@ func (c *vaultServiceClient) DeleteLoginPassword(ctx context.Context, in *Delete
 //
 // VaultService service definition
 type VaultServiceServer interface {
-	GetLoginPasswords(context.Context, *GetLoginPasswordsRequest) (*GetLoginPasswordsResponse, error)
+	GetVaultItems(context.Context, *GetVaultItemsRequest) (*GetVaultItemsResponse, error)
 	SaveLoginPassword(context.Context, *SaveLoginPasswordRequest) (*SaveLoginPasswordResponse, error)
-	DeleteLoginPassword(context.Context, *DeleteLoginPasswordRequest) (*DeleteLoginPasswordResponse, error)
+	SaveTextData(context.Context, *SaveTextDataRequest) (*SaveTextDataResponse, error)
+	SaveBinaryData(context.Context, *SaveBinaryDataRequest) (*SaveBinaryDataResponse, error)
+	SaveCardData(context.Context, *SaveCardDataRequest) (*SaveCardDataResponse, error)
+	SaveMeta(context.Context, *SaveMetaRequest) (*SaveMetaResponse, error)
+	DeleteVaultItem(context.Context, *DeleteVaultItemRequest) (*DeleteVaultItemResponse, error)
 	mustEmbedUnimplementedVaultServiceServer()
 }
 
@@ -93,14 +144,26 @@ type VaultServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedVaultServiceServer struct{}
 
-func (UnimplementedVaultServiceServer) GetLoginPasswords(context.Context, *GetLoginPasswordsRequest) (*GetLoginPasswordsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLoginPasswords not implemented")
+func (UnimplementedVaultServiceServer) GetVaultItems(context.Context, *GetVaultItemsRequest) (*GetVaultItemsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVaultItems not implemented")
 }
 func (UnimplementedVaultServiceServer) SaveLoginPassword(context.Context, *SaveLoginPasswordRequest) (*SaveLoginPasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveLoginPassword not implemented")
 }
-func (UnimplementedVaultServiceServer) DeleteLoginPassword(context.Context, *DeleteLoginPasswordRequest) (*DeleteLoginPasswordResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteLoginPassword not implemented")
+func (UnimplementedVaultServiceServer) SaveTextData(context.Context, *SaveTextDataRequest) (*SaveTextDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveTextData not implemented")
+}
+func (UnimplementedVaultServiceServer) SaveBinaryData(context.Context, *SaveBinaryDataRequest) (*SaveBinaryDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveBinaryData not implemented")
+}
+func (UnimplementedVaultServiceServer) SaveCardData(context.Context, *SaveCardDataRequest) (*SaveCardDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveCardData not implemented")
+}
+func (UnimplementedVaultServiceServer) SaveMeta(context.Context, *SaveMetaRequest) (*SaveMetaResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveMeta not implemented")
+}
+func (UnimplementedVaultServiceServer) DeleteVaultItem(context.Context, *DeleteVaultItemRequest) (*DeleteVaultItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVaultItem not implemented")
 }
 func (UnimplementedVaultServiceServer) mustEmbedUnimplementedVaultServiceServer() {}
 func (UnimplementedVaultServiceServer) testEmbeddedByValue()                      {}
@@ -123,20 +186,20 @@ func RegisterVaultServiceServer(s grpc.ServiceRegistrar, srv VaultServiceServer)
 	s.RegisterService(&VaultService_ServiceDesc, srv)
 }
 
-func _VaultService_GetLoginPasswords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLoginPasswordsRequest)
+func _VaultService_GetVaultItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVaultItemsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VaultServiceServer).GetLoginPasswords(ctx, in)
+		return srv.(VaultServiceServer).GetVaultItems(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: VaultService_GetLoginPasswords_FullMethodName,
+		FullMethod: VaultService_GetVaultItems_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VaultServiceServer).GetLoginPasswords(ctx, req.(*GetLoginPasswordsRequest))
+		return srv.(VaultServiceServer).GetVaultItems(ctx, req.(*GetVaultItemsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -159,20 +222,92 @@ func _VaultService_SaveLoginPassword_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VaultService_DeleteLoginPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteLoginPasswordRequest)
+func _VaultService_SaveTextData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveTextDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VaultServiceServer).DeleteLoginPassword(ctx, in)
+		return srv.(VaultServiceServer).SaveTextData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: VaultService_DeleteLoginPassword_FullMethodName,
+		FullMethod: VaultService_SaveTextData_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VaultServiceServer).DeleteLoginPassword(ctx, req.(*DeleteLoginPasswordRequest))
+		return srv.(VaultServiceServer).SaveTextData(ctx, req.(*SaveTextDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VaultService_SaveBinaryData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveBinaryDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VaultServiceServer).SaveBinaryData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VaultService_SaveBinaryData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VaultServiceServer).SaveBinaryData(ctx, req.(*SaveBinaryDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VaultService_SaveCardData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveCardDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VaultServiceServer).SaveCardData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VaultService_SaveCardData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VaultServiceServer).SaveCardData(ctx, req.(*SaveCardDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VaultService_SaveMeta_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveMetaRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VaultServiceServer).SaveMeta(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VaultService_SaveMeta_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VaultServiceServer).SaveMeta(ctx, req.(*SaveMetaRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VaultService_DeleteVaultItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVaultItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VaultServiceServer).DeleteVaultItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VaultService_DeleteVaultItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VaultServiceServer).DeleteVaultItem(ctx, req.(*DeleteVaultItemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -185,16 +320,32 @@ var VaultService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*VaultServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetLoginPasswords",
-			Handler:    _VaultService_GetLoginPasswords_Handler,
+			MethodName: "GetVaultItems",
+			Handler:    _VaultService_GetVaultItems_Handler,
 		},
 		{
 			MethodName: "SaveLoginPassword",
 			Handler:    _VaultService_SaveLoginPassword_Handler,
 		},
 		{
-			MethodName: "DeleteLoginPassword",
-			Handler:    _VaultService_DeleteLoginPassword_Handler,
+			MethodName: "SaveTextData",
+			Handler:    _VaultService_SaveTextData_Handler,
+		},
+		{
+			MethodName: "SaveBinaryData",
+			Handler:    _VaultService_SaveBinaryData_Handler,
+		},
+		{
+			MethodName: "SaveCardData",
+			Handler:    _VaultService_SaveCardData_Handler,
+		},
+		{
+			MethodName: "SaveMeta",
+			Handler:    _VaultService_SaveMeta_Handler,
+		},
+		{
+			MethodName: "DeleteVaultItem",
+			Handler:    _VaultService_DeleteVaultItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

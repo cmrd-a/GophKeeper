@@ -2,52 +2,153 @@ syntax = "proto3";
 package v1.vault;
 
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/cmrd-a/GophKeeper/gen/proto/v1/vault;vault";
 
-// VaultService service definition
-service VaultService {
-  rpc GetLoginPasswords(GetLoginPasswordsRequest) returns (GetLoginPasswordsResponse) {
-    option (google.api.http) = {
-      post: "/api/v1/vault/get-login-passwords"
-      body: "*"
-    };
-  };
-  rpc SaveLoginPassword(SaveLoginPasswordRequest) returns (SaveLoginPasswordResponse) {
-    option (google.api.http) = {
-      post: "/api/v1/vault/save-login-password"
-      body: "*"
-    };
-  };
-  rpc DeleteLoginPassword(DeleteLoginPasswordRequest) returns (DeleteLoginPasswordResponse) {
-    option (google.api.http) = {
-      post: "/api/v1/vault/delete-login-password"
-      body: "*"
-    };
-  };
+message VaultItem {
+  string id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp updated_at = 3;
+  string user_id = 4;
 }
 
-message GetLoginPasswordsRequest {}
+message Meta {
+  VaultItem base = 1;
+  string key = 2;
+  string value = 3;
+  string item_id = 4;
+}
 
-message GetLoginPasswordsResponse {
-    repeated LoginPassword login_passwords = 1;
-    
-    message LoginPassword {
-        string login = 1;
-        string password = 2;
-    }
+message LoginPassword {
+  VaultItem base = 1;
+  string login = 2;
+  string password = 3;
+}
+
+message TextData {
+  VaultItem base = 1;
+  string text = 2;
+}
+
+message BinaryData {
+  VaultItem base = 1;
+  bytes data = 2;
+}
+
+message CardData {
+  VaultItem base = 1;
+  string number = 2;
+  string holder = 3;
+  string expire = 4;
+  string cvv = 5;
+}
+
+// VaultService service definition
+service VaultService {
+  rpc GetVaultItems(GetVaultItemsRequest) returns (GetVaultItemsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/vault/items"
+    };
+  }
+  
+  rpc SaveLoginPassword(SaveLoginPasswordRequest) returns (SaveLoginPasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/login-password"
+      body: "*"
+    };
+  }
+  
+  rpc SaveTextData(SaveTextDataRequest) returns (SaveTextDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/text"
+      body: "*"
+    };
+  }
+  
+  rpc SaveBinaryData(SaveBinaryDataRequest) returns (SaveBinaryDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/binary"
+      body: "*"
+    };
+  }
+  
+  rpc SaveCardData(SaveCardDataRequest) returns (SaveCardDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/card"
+      body: "*"
+    };
+  }
+  
+  rpc SaveMeta(SaveMetaRequest) returns (SaveMetaResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/meta"
+      body: "*"
+    };
+  }
+  
+  rpc DeleteVaultItem(DeleteVaultItemRequest) returns (DeleteVaultItemResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/vault/item/{id}"
+    };
+  }
+}
+
+message GetVaultItemsRequest {}
+
+message GetVaultItemsResponse {
+  repeated LoginPassword login_passwords = 1;
+  repeated TextData text_data = 2;
+  repeated BinaryData binary_data = 3;
+  repeated CardData card_data = 4;
+  map<string, Meta> meta = 5;
 }
 
 message SaveLoginPasswordRequest {
-    optional string id = 1;
-    string login = 2;
-    string password = 3;
+  string login = 1;
+  string password = 2;
 }
 
-message SaveLoginPasswordResponse {}
-
-message DeleteLoginPasswordRequest {
-    string id = 1;
+message SaveLoginPasswordResponse {
+  string id = 1;
 }
 
-message DeleteLoginPasswordResponse {}
+message SaveTextDataRequest {
+  string text = 1;
+}
+
+message SaveTextDataResponse {
+  string id = 1;
+}
+
+message SaveBinaryDataRequest {
+  bytes data = 1;
+}
+
+message SaveBinaryDataResponse {
+  string id = 1;
+}
+
+message SaveCardDataRequest {
+  string number = 1;
+  string holder = 2;
+  string expire = 3;
+  string cvv = 4;
+}
+
+message SaveCardDataResponse {
+  string id = 1;
+}
+
+message SaveMetaRequest {
+  repeated Meta meta = 1;
+}
+
+message SaveMetaResponse {}
+
+message DeleteVaultItemRequest {
+  string id = 1;
+  string type = 2;
+}
+
+message DeleteVaultItemResponse {}

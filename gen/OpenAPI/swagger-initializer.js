@@ -7,6 +7,7 @@ window.onload = function() {
     dom_id: '#swagger-ui',
     deepLinking: true,
     defaultModelsExpandDepth: -1,
+    validatorUrl: null,
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset
