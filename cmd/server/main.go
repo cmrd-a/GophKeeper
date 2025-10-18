@@ -112,12 +112,12 @@ func startServers(log *slog.Logger, cfg *config.Config) {
 
 // chainUnaryInterceptors chains multiple unary interceptors.
 func chainUnaryInterceptors(interceptors ...grpc.UnaryServerInterceptor) grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		chained := handler
 		for i := len(interceptors) - 1; i >= 0; i-- {
 			interceptor := interceptors[i]
 			next := chained
-			chained = func(currentCtx context.Context, currentReq interface{}) (interface{}, error) {
+			chained = func(currentCtx context.Context, currentReq any) (any, error) {
 				return interceptor(currentCtx, currentReq, info, next)
 			}
 		}
@@ -127,12 +127,12 @@ func chainUnaryInterceptors(interceptors ...grpc.UnaryServerInterceptor) grpc.Un
 
 // chainStreamInterceptors chains multiple stream interceptors.
 func chainStreamInterceptors(interceptors ...grpc.StreamServerInterceptor) grpc.StreamServerInterceptor {
-	return func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	return func(srv any, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		chained := handler
 		for i := len(interceptors) - 1; i >= 0; i-- {
 			interceptor := interceptors[i]
 			next := chained
-			chained = func(currentSrv interface{}, currentStream grpc.ServerStream) error {
+			chained = func(currentSrv any, currentStream grpc.ServerStream) error {
 				return interceptor(currentSrv, currentStream, info, next)
 			}
 		}
