@@ -1,37 +1,41 @@
 package main
 
 import (
-	"context"
 	"log"
-	"time"
+	"os"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/cmrd-a/GophKeeper/gen/proto/v1/user"
-	"github.com/cmrd-a/GophKeeper/server/insecure"
+	"github.com/cmrd-a/GophKeeper/client"
+	"github.com/cmrd-a/GophKeeper/cmd/client/tui"
 )
 
 func main() {
-	log.Println("its a client")
-	get()
-}
+	serverAddr := "localhost:8082"
+	if addr := os.Getenv("GOPHKEEPER_SERVER"); addr != "" {
+		serverAddr = addr
+	}
 
-func get() {
-	creds := credentials.NewClientTLSFromCert(insecure.CertPool, "localhost:8082")
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithTransportCredentials(creds))
-	conn, err := grpc.NewClient("localhost:8082", opts...)
-	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
+	log.Printf("Starting GophKeeper client, connecting to server at %s", serverAddr)
+	log.Printf("Make sure the server is running with: go run ./cmd/server")
+
+	// Create client configuration
+	config := &client.ClientConfig{
+		ServerAddr: serverAddr,
 	}
-	defer conn.Close()
-	client := user.NewUserServiceClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	res, err := client.Register(ctx, &user.RegisterRequest{Login: "user", Password: "password"})
+
+	// Create client using the new client package
+	gophClient, err := client.NewClient(config)
 	if err != nil {
-		log.Fatalf("client failed: %v", err)
+		log.Fatalf("Failed to create client: %v", err)
 	}
-	log.Println(res)
+	defer gophClient.Close()
+
+	// Create and run the TUI application
+	app := tui.NewApp(gophClient)
+
+	p := tea.NewProgram(app, tea.WithAltScreen())
+	if _, err := p.Run(); err != nil {
+		log.Fatalf("Failed to run TUI: %v", err)
+	}
 }
