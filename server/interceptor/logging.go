@@ -16,7 +16,7 @@ import (
 
 // LoggingUnaryInterceptor logs gRPC unary requests and responses.
 func LoggingUnaryInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		start := time.Now()
 
 		// Log incoming request
@@ -58,7 +58,7 @@ func LoggingUnaryInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
 
 // LoggingStreamInterceptor logs gRPC streaming requests.
 func LoggingStreamInterceptor(logger *slog.Logger) grpc.StreamServerInterceptor {
-	return func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	return func(srv any, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		start := time.Now()
 
 		logger.Info("gRPC stream started",
@@ -109,7 +109,7 @@ type loggingServerStream struct {
 	method string
 }
 
-func (s *loggingServerStream) RecvMsg(m interface{}) error {
+func (s *loggingServerStream) RecvMsg(m any) error {
 	err := s.ServerStream.RecvMsg(m)
 	if err == nil {
 		msgJSON := formatMessage(m)
@@ -121,7 +121,7 @@ func (s *loggingServerStream) RecvMsg(m interface{}) error {
 	return err
 }
 
-func (s *loggingServerStream) SendMsg(m interface{}) error {
+func (s *loggingServerStream) SendMsg(m any) error {
 	msgJSON := formatMessage(m)
 	s.logger.Debug("gRPC stream sending message",
 		"method", s.method,
@@ -130,8 +130,8 @@ func (s *loggingServerStream) SendMsg(m interface{}) error {
 	return s.ServerStream.SendMsg(m)
 }
 
-// formatMessage formats a protobuf message or any interface{} for logging.
-func formatMessage(msg interface{}) string {
+// formatMessage formats a protobuf message or any any for logging.
+func formatMessage(msg any) string {
 	if msg == nil {
 		return "null"
 	}
@@ -140,7 +140,7 @@ func formatMessage(msg interface{}) string {
 	if pbMsg, ok := msg.(proto.Message); ok {
 		if jsonBytes, err := protojson.Marshal(pbMsg); err == nil {
 			// Pretty print JSON for better readability
-			var prettyJSON interface{}
+			var prettyJSON any
 			if err := json.Unmarshal(jsonBytes, &prettyJSON); err == nil {
 				if formatted, err := json.MarshalIndent(prettyJSON, "", "  "); err == nil {
 					return string(formatted)
@@ -171,7 +171,7 @@ type LoggingConfig struct {
 
 // ConfigurableLoggingUnaryInterceptor creates a logging interceptor with custom configuration.
 func ConfigurableLoggingUnaryInterceptor(logger *slog.Logger, config LoggingConfig) grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		start := time.Now()
 
 		// Log incoming request
@@ -227,7 +227,7 @@ func ConfigurableLoggingUnaryInterceptor(logger *slog.Logger, config LoggingConf
 }
 
 // formatMessageWithLimit formats a message with size limit.
-func formatMessageWithLimit(msg interface{}, maxSize int) string {
+func formatMessageWithLimit(msg any, maxSize int) string {
 	formatted := formatMessage(msg)
 	if maxSize > 0 && len(formatted) > maxSize {
 		return formatted[:maxSize] + "...[truncated]"

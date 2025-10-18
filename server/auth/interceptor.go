@@ -15,7 +15,7 @@ const UserIDKey userIDKeyType = "user_id"
 
 // UnaryServerInterceptor returns a new unary server interceptor for auth.
 func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		// Skip auth for Register and Login
 		if info.FullMethod == "/user.UserService/Register" || info.FullMethod == "/user.UserService/Login" {
 			return handler(ctx, req)

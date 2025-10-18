@@ -289,7 +289,7 @@ Consider implementing custom formatters to mask sensitive fields:
 
 ```go
 // Example of custom message formatter
-func secureFormatMessage(msg interface{}) string {
+func secureFormatMessage(msg any) string {
     formatted := formatMessage(msg)
     // Mask password fields
     re := regexp.MustCompile(`"password":\s*"[^"]*"`)

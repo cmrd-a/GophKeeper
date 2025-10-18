@@ -25,13 +25,12 @@ func UserIDFromContext(ctx context.Context) (string, error) {
 // AuthInterceptor validates JWT tokens and adds user ID to context.
 func AuthInterceptor(
 	ctx context.Context,
-	req interface{},
+	req any,
 	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
-) (interface{}, error) {
+) (any, error) {
 	// Skip auth for user service methods
-	switch info.FullMethod {
-	case "/v1.user.UserService/Register", "/v1.user.UserService/Login":
+	if info.FullMethod == "/v1.user.UserService/Register" || info.FullMethod == "/v1.user.UserService/Login" {
 		return handler(ctx, req)
 	}
 
@@ -57,11 +56,14 @@ func AuthInterceptor(
 
 // StreamAuthInterceptor validates JWT for streaming RPCs.
 func StreamAuthInterceptor(
-	srv interface{},
+	srv any,
 	ss grpc.ServerStream,
 	info *grpc.StreamServerInfo,
 	handler grpc.StreamHandler,
 ) error {
+	if info.FullMethod == "/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo" {
+		return handler(srv, ss)
+	}
 	// Extract token from metadata
 	ctx := ss.Context()
 	md, ok := metadata.FromIncomingContext(ctx)

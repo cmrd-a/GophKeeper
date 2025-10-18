@@ -27,12 +27,12 @@ func TestLoggingUnaryInterceptor(t *testing.T) {
 	tests := []struct {
 		name          string
 		handler       grpc.UnaryHandler
-		request       interface{}
+		request       any
 		expectedError error
 	}{
 		{
 			name: "Success",
-			handler: func(ctx context.Context, req interface{}) (interface{}, error) {
+			handler: func(ctx context.Context, req any) (any, error) {
 				return &vault.GetVaultItemsResponse{}, nil
 			},
 			request:       &vault.GetVaultItemsRequest{},
@@ -40,7 +40,7 @@ func TestLoggingUnaryInterceptor(t *testing.T) {
 		},
 		{
 			name: "Error",
-			handler: func(ctx context.Context, req interface{}) (interface{}, error) {
+			handler: func(ctx context.Context, req any) (any, error) {
 				return nil, status.Error(codes.Internal, "test error")
 			},
 			request:       &vault.GetVaultItemsRequest{},
@@ -90,14 +90,14 @@ func TestLoggingStreamInterceptor(t *testing.T) {
 	}{
 		{
 			name: "Success",
-			handler: func(srv interface{}, stream grpc.ServerStream) error {
+			handler: func(srv any, stream grpc.ServerStream) error {
 				return nil
 			},
 			expectedError: nil,
 		},
 		{
 			name: "Error",
-			handler: func(srv interface{}, stream grpc.ServerStream) error {
+			handler: func(srv any, stream grpc.ServerStream) error {
 				return status.Error(codes.Internal, "stream error")
 			},
 			expectedError: status.Error(codes.Internal, "stream error"),
@@ -171,7 +171,7 @@ func TestLoggingServerStream(t *testing.T) {
 func TestFormatMessage(t *testing.T) {
 	tests := []struct {
 		name     string
-		msg      interface{}
+		msg      any
 		contains []string
 	}{
 		{
@@ -248,7 +248,7 @@ func TestConfigurableLoggingUnaryInterceptor(t *testing.T) {
 
 			interceptor := ConfigurableLoggingUnaryInterceptor(logger, tt.config)
 			info := &grpc.UnaryServerInfo{FullMethod: "/test.Service/Method"}
-			handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+			handler := func(ctx context.Context, req any) (any, error) {
 				return &vault.GetVaultItemsResponse{}, nil
 			}
 
@@ -272,7 +272,7 @@ func TestConfigurableLoggingUnaryInterceptor(t *testing.T) {
 func TestFormatMessageWithLimit(t *testing.T) {
 	tests := []struct {
 		name     string
-		msg      interface{}
+		msg      any
 		maxSize  int
 		expected string
 	}{
@@ -301,7 +301,7 @@ func TestFormatMessageWithLimit(t *testing.T) {
 			result := formatMessageWithLimit(tt.msg, tt.maxSize)
 			if tt.maxSize > 0 && len(formatMessage(tt.msg)) > tt.maxSize {
 				assert.Contains(t, result, "...[truncated]")
-				assert.True(t, len(result) > tt.maxSize) // Should be maxSize + len("...[truncated]")
+				assert.Greater(t, len(result), tt.maxSize) // Should be maxSize + len("...[truncated]")
 			} else {
 				assert.Equal(t, formatMessage(tt.msg), result)
 			}
@@ -319,7 +319,7 @@ func TestLoggingInterceptorTiming(t *testing.T) {
 	info := &grpc.UnaryServerInfo{FullMethod: "/test.Service/Method"}
 
 	// Handler that takes some time
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		time.Sleep(10 * time.Millisecond)
 		return &vault.GetVaultItemsResponse{}, nil
 	}
@@ -332,9 +332,10 @@ func TestLoggingInterceptorTiming(t *testing.T) {
 	assert.Contains(t, logOutput, "ms") // Should contain milliseconds in duration
 }
 
-// mockServerStreamWithMethods implements the missing methods for ServerStream
+// mockServerStreamWithMethods implements the missing methods for ServerStream.
 type mockServerStreamWithMethods struct {
 	grpc.ServerStream
+
 	ctx context.Context
 }
 
@@ -342,12 +343,12 @@ func (s *mockServerStreamWithMethods) Context() context.Context {
 	return s.ctx
 }
 
-func (s *mockServerStreamWithMethods) RecvMsg(m interface{}) error {
+func (s *mockServerStreamWithMethods) RecvMsg(m any) error {
 	// Mock implementation - just return nil to simulate successful receive
 	return nil
 }
 
-func (s *mockServerStreamWithMethods) SendMsg(m interface{}) error {
+func (s *mockServerStreamWithMethods) SendMsg(m any) error {
 	// Mock implementation - just return nil to simulate successful send
 	return nil
 }

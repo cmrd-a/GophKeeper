@@ -52,7 +52,7 @@ func TestAuthInterceptor(t *testing.T) {
 				FullMethod: tt.method,
 			}
 
-			handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+			handler := func(ctx context.Context, req any) (any, error) {
 				return "ok", nil
 			}
 
@@ -139,7 +139,7 @@ func TestStreamAuthInterceptor(t *testing.T) {
 
 			stream := &mockServerStream{ctx: ctx}
 			info := &grpc.StreamServerInfo{}
-			handler := func(srv interface{}, stream grpc.ServerStream) error {
+			handler := func(srv any, stream grpc.ServerStream) error {
 				return nil
 			}
 
