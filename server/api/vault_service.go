@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/cmrd-a/GophKeeper/gen/proto/v1/vault"
-	"github.com/cmrd-a/GophKeeper/server/auth"
+	"github.com/cmrd-a/GophKeeper/server/interceptor"
 	"github.com/cmrd-a/GophKeeper/server/models"
 	"github.com/cmrd-a/GophKeeper/server/service"
 )
@@ -38,7 +38,7 @@ func (s *VaultServer) GetVaultItems(
 	ctx context.Context,
 	req *vault.GetVaultItemsRequest,
 ) (*vault.GetVaultItemsResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (s *VaultServer) GetVaultItems(
 		loginPasswords[i] = &vault.LoginPassword{
 			Base:     vaultItemToProto(lp.VaultItem),
 			Login:    lp.Login,
-			Password: string(lp.Password),
+			Password: lp.Password,
 		}
 	}
 
@@ -115,7 +115,7 @@ func (s *VaultServer) SaveLoginPassword(
 	ctx context.Context,
 	req *vault.SaveLoginPasswordRequest,
 ) (*vault.SaveLoginPasswordResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (s *VaultServer) SaveTextData(
 	ctx context.Context,
 	req *vault.SaveTextDataRequest,
 ) (*vault.SaveTextDataResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +182,7 @@ func (s *VaultServer) SaveBinaryData(
 	ctx context.Context,
 	req *vault.SaveBinaryDataRequest,
 ) (*vault.SaveBinaryDataResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +215,7 @@ func (s *VaultServer) SaveCardData(
 	ctx context.Context,
 	req *vault.SaveCardDataRequest,
 ) (*vault.SaveCardDataResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +253,7 @@ func (s *VaultServer) SaveCardData(
 }
 
 func (s *VaultServer) SaveMeta(ctx context.Context, req *vault.SaveMetaRequest) (*vault.SaveMetaResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -292,7 +292,7 @@ func (s *VaultServer) DeleteVaultItem(
 	ctx context.Context,
 	req *vault.DeleteVaultItemRequest,
 ) (*vault.DeleteVaultItemResponse, error) {
-	userID, err := auth.GetUserIDFromContext(ctx)
+	userID, err := interceptor.GetUserIDFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -51,7 +51,7 @@ func (r *Repository) GetUserByLogin(ctx context.Context, login string) (string, 
 
 func (r *Repository) GetLoginPasswords(ctx context.Context, userID string) ([]models.LoginPassword, error) {
 	rows, err := r.pool.Query(ctx,
-		`SELECT id, user_id, login, password, created_at, updated_at 
+		`SELECT id, user_id, login, password
          FROM login_password WHERE user_id = $1`, userID)
 	if err != nil {
 		return nil, err

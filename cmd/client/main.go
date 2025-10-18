@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -16,8 +16,8 @@ func main() {
 		serverAddr = addr
 	}
 
-	log.Printf("Starting GophKeeper client, connecting to server at %s", serverAddr)
-	log.Printf("Make sure the server is running with: go run ./cmd/server")
+	slog.Info("Starting GophKeeper client", "serverAddr", serverAddr)
+	slog.Info("Server should be running", "command", "go run ./cmd/server")
 
 	// Create client configuration
 	config := &client.ClientConfig{
@@ -27,7 +27,8 @@ func main() {
 	// Create client using the new client package
 	gophClient, err := client.NewClient(config)
 	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
+		slog.Error("Failed to create client", "error", err)
+		os.Exit(1)
 	}
 	defer gophClient.Close()
 
@@ -36,6 +37,7 @@ func main() {
 
 	p := tea.NewProgram(app, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
-		log.Fatalf("Failed to run TUI: %v", err)
+		slog.Error("Failed to run TUI", "error", err)
+		os.Exit(1)
 	}
 }

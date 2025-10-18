@@ -104,8 +104,7 @@ func NewClient(config *ClientConfig) (GophKeeperClient, error) {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(creds))
 
-	// TODO: Replace deprecated grpc.DialContext when stable alternative is available
-	grpcConn, err := grpc.NewClient( config.ServerAddr, opts...) //nolint:staticcheck
+	grpcConn, err := grpc.NewClient(config.ServerAddr, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to dial server via gRPC: %w", err)
 	}
@@ -217,7 +216,7 @@ func (c *Client) GetAuthContext(ctx context.Context) context.Context {
 		return ctx
 	}
 
-	md := metadata.Pairs("authorization", "Bearer "+c.token)
+	md := metadata.Pairs("authorization", c.token)
 	return metadata.NewOutgoingContext(ctx, md)
 }
 

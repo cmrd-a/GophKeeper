@@ -11,11 +11,13 @@ import (
 	"github.com/cmrd-a/GophKeeper/server/auth"
 )
 
-type userIDKey struct{}
+type userIDKeyType string
+
+const UserIDKey userIDKeyType = "user_id"
 
 // UserIDFromContext gets user ID from context.
 func UserIDFromContext(ctx context.Context) (string, error) {
-	id, ok := ctx.Value(userIDKey{}).(string)
+	id, ok := ctx.Value(UserIDKey).(string)
 	if !ok {
 		return "", status.Error(codes.Unauthenticated, "no user id in context")
 	}
@@ -50,7 +52,7 @@ func AuthInterceptor(
 	}
 
 	// Add user ID to context
-	newCtx := context.WithValue(ctx, userIDKey{}, userID)
+	newCtx := context.WithValue(ctx, UserIDKey, userID)
 	return handler(newCtx, req)
 }
 
@@ -84,7 +86,7 @@ func StreamAuthInterceptor(
 	// Wrap stream with user ID context
 	wrapped := &wrappedStream{
 		ServerStream: ss,
-		ctx:          context.WithValue(ctx, userIDKey{}, userID),
+		ctx:          context.WithValue(ctx, UserIDKey, userID),
 	}
 	return handler(srv, wrapped)
 }
@@ -101,5 +103,14 @@ func (w *wrappedStream) Context() context.Context {
 
 // ContextWithUserID creates a context with user ID for testing purposes.
 func ContextWithUserID(ctx context.Context, userID string) context.Context {
-	return context.WithValue(ctx, userIDKey{}, userID)
+	return context.WithValue(ctx, UserIDKey, userID)
+}
+
+// GetUserIDFromContext extracts user ID from context.
+func GetUserIDFromContext(ctx context.Context) (string, error) {
+	userID, ok := ctx.Value(UserIDKey).(string)
+	if !ok {
+		return "", status.Error(codes.Internal, "user ID not found in context")
+	}
+	return userID, nil
 }
