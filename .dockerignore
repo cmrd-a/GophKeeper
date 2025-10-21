@@ -1,0 +1,55 @@
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.html
+coverage.out
+
+# Dependency directories
+vendor/
+
+# IDE directories
+.idea/
+.vscode/
+.cache/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+SPECIFICATION.md
+
+# Docker
+Dockerfile
+.dockerignore
+compose.yml
+
+# Examples
+examples/
+
+# Client
+client/
+
+# Generated files that aren't needed in runtime
+.golangci.yml
+buf.yaml
+buf.lock
+buf.gen.yaml
+generate-swagger-ui.sh
+
+# Proto files (already compiled)
+proto/
+
+# Scripts
+scripts/

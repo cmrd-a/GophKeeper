@@ -41,6 +41,11 @@ func CreateToken(userID string, ttl time.Duration) (string, error) {
 
 // ParseAndValidate parses a token string and returns user id if valid.
 func ParseAndValidate(tokenStr string) (string, error) {
+	// Strip "Bearer " prefix if present
+	if len(tokenStr) > 7 && tokenStr[:7] == "Bearer " {
+		tokenStr = tokenStr[7:]
+	}
+
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (any, error) {
 		return hmacSampleSecret, nil
 	})

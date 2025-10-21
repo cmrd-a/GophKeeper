@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"log"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/lipgloss"
@@ -19,6 +21,10 @@ type AddItemScreen struct {
 	form       *huh.Form
 	showMenu   bool
 	menuCursor int
+
+	// Form state tracking
+	formInitialized bool
+	lastError       string
 
 	// Form fields for different item types
 	// Login/Password
@@ -56,6 +62,7 @@ func (ais *AddItemScreen) Init() tea.Cmd {
 func (ais *AddItemScreen) SetItemType(itemType ItemType) {
 	ais.itemType = itemType
 	ais.showMenu = false
+	ais.lastError = ""
 	ais.buildForm()
 }
 
@@ -71,22 +78,47 @@ func (ais *AddItemScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return ais.handleMenuInput(msg)
 		}
 
-		switch msg.String() {
-		case "esc":
-			if ais.form != nil {
-				ais.showMenu = true
-				ais.form = nil
+		// Handle form navigation and actions
+		if ais.form != nil && ais.formInitialized {
+			// Handle escape to return to menu
+			if msg.String() == "esc" {
+				ais.Reset()
 				return ais, nil
 			}
 
-		case "enter":
-			if ais.form != nil && ais.form.State == huh.StateCompleted {
+			// Handle quit
+			if msg.String() == "ctrl+c" {
+				return ais, tea.Quit
+			}
+
+			// Clear any previous errors when user interacts
+			if msg.String() != "" && ais.lastError != "" {
+				ais.lastError = ""
+			}
+
+			// Handle save - try multiple conditions to catch form completion
+			if msg.String() == "ctrl+s" {
+				// Manual save with Ctrl+S
+				log.Printf("Manual save triggered")
+				if ais.isFormValid() {
+					return ais, ais.saveItem()
+				} else {
+					ais.lastError = "Please fill all required fields"
+				}
+			} else if ais.form.State == huh.StateCompleted && (msg.String() == "enter" || msg.String() == " ") {
+				log.Printf("Form completed save triggered")
+				return ais, ais.saveItem()
+			} else if msg.String() == "enter" && ais.isFormValid() {
+				// Try to save on enter if form looks valid
+				log.Printf("Enter key save attempt")
 				return ais, ais.saveItem()
 			}
-		}
 
-		// Update form if it exists
-		if ais.form != nil {
+			if ais.form.State != huh.StateCompleted {
+				log.Printf("Form state: %v, key: %s", ais.form.State, msg.String())
+			}
+
+			// Pass all key messages to the form for navigation and input
 			form, cmd := ais.form.Update(msg)
 			if f, ok := form.(*huh.Form); ok {
 				ais.form = f
@@ -127,9 +159,12 @@ func (ais *AddItemScreen) handleMenuInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "enter":
 		ais.itemType = ItemType(ais.menuCursor)
 		ais.showMenu = false
+		ais.lastError = ""
 		ais.buildForm()
-		if ais.form != nil {
-			return ais, ais.form.Init()
+		if ais.form != nil && ais.formInitialized {
+			// Initialize and focus the form
+			cmd := ais.form.Init()
+			return ais, cmd
 		}
 	}
 
@@ -233,19 +268,64 @@ func (ais *AddItemScreen) renderForm() string {
 		MarginBottom(2).
 		Render(title)
 
-	formView := ais.form.View()
+	var formView string
+	var help string
 
-	help := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#6272A4")).
-		MarginTop(2).
-		Render("Tab/Shift+Tab: Navigate • Enter: Save • Esc: Back to menu")
+	if ais.form != nil {
+		formView = ais.form.View()
 
-	content := lipgloss.JoinVertical(
-		lipgloss.Left,
-		titleView,
-		formView,
-		help,
-	)
+		switch ais.form.State {
+		case huh.StateCompleted:
+			help = lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#50FA7B")).
+				Bold(true).
+				MarginTop(2).
+				Render("✓ Form Complete • Enter: Save Item • Esc: Back to menu")
+		case huh.StateAborted:
+			help = lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#FF5F87")).
+				MarginTop(2).
+				Render("Form cancelled • Esc: Back to menu")
+		default:
+			stateDebug := fmt.Sprintf("State: %v", ais.form.State)
+			saveHint := ""
+			if ais.isFormValid() {
+				saveHint = " • Enter: Save"
+			}
+			help = lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#6272A4")).
+				MarginTop(2).
+				Render("Tab/Shift+Tab: Navigate • Ctrl+S: Save" + saveHint + " • " + stateDebug + " • Esc: Cancel")
+		}
+	} else {
+		formView = "Loading form..."
+		help = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FF5F87")).
+			MarginTop(2).
+			Render("Form failed to initialize • Esc: Back to menu")
+	}
+
+	// Show any error messages
+	var errorView string
+	if ais.lastError != "" {
+		errorView = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FF5F87")).
+			Background(lipgloss.Color("#2D1B00")).
+			Padding(0, 1).
+			MarginTop(1).
+			Render("Error: " + ais.lastError)
+	}
+
+	var contentParts []string
+	contentParts = append(contentParts, titleView, formView)
+
+	if errorView != "" {
+		contentParts = append(contentParts, errorView)
+	}
+
+	contentParts = append(contentParts, help)
+
+	content := lipgloss.JoinVertical(lipgloss.Left, contentParts...)
 
 	// Center content
 	if ais.width > 0 {
@@ -393,17 +473,48 @@ func (ais *AddItemScreen) buildForm() {
 	}
 
 	if len(fields) > 0 {
-		ais.form = huh.NewForm(
-			huh.NewGroup(fields...),
-		).WithWidth(60).WithHeight(15)
+		// Create form with proper configuration
+		formWidth := 60
+		formHeight := 20
+		if ais.width > 0 && ais.width-4 < formWidth {
+			formWidth = ais.width - 4
+		}
+		if ais.height > 0 && ais.height-10 < formHeight {
+			formHeight = ais.height - 10
+		}
+
+		// Ensure minimum dimensions
+		if formWidth < 40 {
+			formWidth = 40
+		}
+		if formHeight < 10 {
+			formHeight = 10
+		}
+
+		group := huh.NewGroup(fields...)
+		ais.form = huh.NewForm(group).
+			WithWidth(formWidth).
+			WithHeight(formHeight).
+			WithTheme(huh.ThemeBase()).
+			WithShowErrors(true).
+			WithShowHelp(true)
+
+		ais.formInitialized = true
+		ais.lastError = ""
+	} else {
+		ais.form = nil
+		ais.formInitialized = false
+		ais.lastError = "No form fields available for this item type"
 	}
 }
 
 // saveItem creates a command to save the item
 func (ais *AddItemScreen) saveItem() tea.Cmd {
+	log.Printf("saveItem called for type: %v", ais.itemType)
 	switch ais.itemType {
 	case TypeLoginPassword:
 		return func() tea.Msg {
+			log.Printf("Saving login/password: login=%s", ais.loginUser)
 			return SaveItemAttemptMsg{
 				Type: TypeLoginPassword,
 				Data: map[string]any{
@@ -415,6 +526,11 @@ func (ais *AddItemScreen) saveItem() tea.Cmd {
 
 	case TypeTextData:
 		return func() tea.Msg {
+			textPreview := ais.textContent
+			if len(textPreview) > 50 {
+				textPreview = textPreview[:50] + "..."
+			}
+			log.Printf("Saving text data: %s", textPreview)
 			return SaveItemAttemptMsg{
 				Type: TypeTextData,
 				Data: map[string]any{
@@ -425,6 +541,7 @@ func (ais *AddItemScreen) saveItem() tea.Cmd {
 
 	case TypeCardData:
 		return func() tea.Msg {
+			log.Printf("Saving card data: holder=%s", ais.cardHolder)
 			return SaveItemAttemptMsg{
 				Type: TypeCardData,
 				Data: map[string]any{
@@ -438,6 +555,7 @@ func (ais *AddItemScreen) saveItem() tea.Cmd {
 
 	case TypeBinaryData:
 		return func() tea.Msg {
+			log.Printf("Saving binary data: %d bytes", len(ais.binaryData))
 			return SaveItemAttemptMsg{
 				Type: TypeBinaryData,
 				Data: map[string]any{
@@ -447,7 +565,26 @@ func (ais *AddItemScreen) saveItem() tea.Cmd {
 		}
 	}
 
+	log.Printf("Unknown item type: %v", ais.itemType)
 	return nil
+}
+
+// isFormValid checks if the current form has all required fields filled
+func (ais *AddItemScreen) isFormValid() bool {
+	switch ais.itemType {
+	case TypeLoginPassword:
+		return strings.TrimSpace(ais.loginUser) != "" && strings.TrimSpace(ais.loginPassword) != ""
+	case TypeTextData:
+		return strings.TrimSpace(ais.textContent) != ""
+	case TypeCardData:
+		return strings.TrimSpace(ais.cardNumber) != "" &&
+			strings.TrimSpace(ais.cardHolder) != "" &&
+			strings.TrimSpace(ais.cardExpiry) != "" &&
+			strings.TrimSpace(ais.cardCVV) != ""
+	case TypeBinaryData:
+		return len(ais.binaryData) > 0
+	}
+	return false
 }
 
 // Reset resets the form fields
@@ -455,6 +592,8 @@ func (ais *AddItemScreen) Reset() {
 	ais.showMenu = true
 	ais.menuCursor = 0
 	ais.form = nil
+	ais.formInitialized = false
+	ais.lastError = ""
 
 	// Clear all form fields
 	ais.loginUser = ""

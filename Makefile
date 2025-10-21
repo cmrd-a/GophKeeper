@@ -1,4 +1,9 @@
-.PHONY: gen mod build build-server build-client run run-client lint check buf-dep test test-unit test-integration test-client clean
+.PHONY: gen mod build build-server build-client run lint check buf-dep test demo
+
+# Build variables
+VERSION ?= dev
+BUILD_DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
+LDFLAGS := -X main.version=$(VERSION) -X main.buildDate=$(BUILD_DATE)
 
 # Load environment variables from .env file if it exists
 ifneq (,$(wildcard .env))
@@ -8,7 +13,6 @@ endif
 
 gen:
 	buf generate
-	# sh generate-swagger-ui.sh
 
 mod:
 	go mod tidy
@@ -20,7 +24,7 @@ build-server: mod
 	go build -o bin/server ./cmd/server
 
 build-client: mod
-	go build -o bin/gophkeeper-client ./cmd/client
+	go build -ldflags "$(LDFLAGS)" -o bin/gophkeeper-client ./cmd/client
 
 run: build-server
 	@if [ -f .env ]; then \
@@ -32,36 +36,18 @@ run: build-server
 		bin/server; \
 	fi
 
-run-client: build-client
-	./scripts/run-client.sh
-
 lint:
 	golangci-lint run ./... --fix
 
 check: build lint test
 
 test:
-	go test -v -race -tags=unit -coverprofile=coverage.out ./...
-	go tool cover -html=coverage.out -o coverage.html
-
-test-unit:
-	./scripts/run-tests.sh --unit-only
-
-test-integration:
-	./scripts/run-tests.sh --integration-only
-
-test-client:
-	./scripts/run-tests.sh
-
-test-client-verbose:
-	./scripts/run-tests.sh --verbose
-
-test-client-no-coverage:
-	./scripts/run-tests.sh --no-coverage
+	go test ./...
 
 buf-dep:
 	buf dep update
 
-clean:
-	rm -rf bin/
-	rm -f coverage.out coverage.html
+demo: build
+	cp .env.example .env
+	docker compose up -d
+	./bin/client

@@ -74,7 +74,7 @@ func Run(log *slog.Logger, dialAddr string, HTTPPort int16) error {
 	}
 	// Empty parameters mean use the TLS Config specified with the server.
 	// if strings.ToLower(os.Getenv("SERVE_HTTP")) == "true" {
-	log.Info("Serving gRPC-Gateway and OpenAPI Documentation on ", "addres", "http://"+gatewayAddr)
+	log.Info("Serving gRPC-Gateway and OpenAPI Documentation on ", "address", "http://"+gatewayAddr)
 	return fmt.Errorf("serving gRPC-Gateway server: %w", gwServer.ListenAndServe())
 	// }
 

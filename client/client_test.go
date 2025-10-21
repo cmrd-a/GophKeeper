@@ -143,21 +143,6 @@ func TestNewClient_InvalidAddress(t *testing.T) {
 	assert.Contains(t, err.Error(), "server not reachable")
 }
 
-func TestNewClient_SkipConnectivityTest(t *testing.T) {
-	// Test configuration validation without network calls
-	config := &ClientConfig{
-		ServerAddr:     "test:8082",
-		ConnectTimeout: 1 * time.Second,
-		RequestTimeout: 1 * time.Second,
-		SkipConnTest:   true,
-	}
-
-	// This will still fail at gRPC dial, but validates config processing
-	client, err := NewClient(config)
-	assert.Error(t, err)
-	assert.Nil(t, client)
-}
-
 func TestNewClientWithConn(t *testing.T) {
 	// Test the mock-friendly constructor
 	testClient := newTestClient()

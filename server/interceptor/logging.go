@@ -9,6 +9,8 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -19,12 +21,17 @@ func LoggingUnaryInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		start := time.Now()
 
+		// Extract metadata
+		metadataAttrs := extractMetadata(ctx)
+
 		// Log incoming request
 		reqJSON := formatMessage(req)
-		logger.Info("gRPC request",
+		logAttrs := []any{
 			"method", info.FullMethod,
 			"request", reqJSON,
-		)
+		}
+		logAttrs = append(logAttrs, metadataAttrs...)
+		logger.Info("gRPC request", logAttrs...)
 
 		// Call the handler
 		resp, err := handler(ctx, req)
@@ -44,13 +51,15 @@ func LoggingUnaryInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
 			}
 		}
 
-		logger.Info("gRPC response",
+		logAttrs = []any{
 			"method", info.FullMethod,
 			"duration", duration.String(),
 			"code", grpcCode.String(),
 			"error", errMsg,
 			"response", respJSON,
-		)
+		}
+		logAttrs = append(logAttrs, metadataAttrs...)
+		logger.Info("gRPC response", logAttrs...)
 
 		return resp, err
 	}
@@ -61,11 +70,17 @@ func LoggingStreamInterceptor(logger *slog.Logger) grpc.StreamServerInterceptor 
 	return func(srv any, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		start := time.Now()
 
-		logger.Info("gRPC stream started",
+		// Extract metadata
+		ctx := ss.Context()
+		metadataAttrs := extractMetadata(ctx)
+
+		logAttrs := []any{
 			"method", info.FullMethod,
 			"is_client_stream", info.IsClientStream,
 			"is_server_stream", info.IsServerStream,
-		)
+		}
+		logAttrs = append(logAttrs, metadataAttrs...)
+		logger.Info("gRPC stream started", logAttrs...)
 
 		// Wrap the server stream to log messages
 		wrappedStream := &loggingServerStream{
@@ -90,12 +105,14 @@ func LoggingStreamInterceptor(logger *slog.Logger) grpc.StreamServerInterceptor 
 			}
 		}
 
-		logger.Info("gRPC stream completed",
+		logAttrs = []any{
 			"method", info.FullMethod,
 			"duration", duration.String(),
 			"code", grpcCode.String(),
 			"error", errMsg,
-		)
+		}
+		logAttrs = append(logAttrs, metadataAttrs...)
+		logger.Info("gRPC stream completed", logAttrs...)
 
 		return err
 	}
@@ -174,17 +191,24 @@ func ConfigurableLoggingUnaryInterceptor(logger *slog.Logger, config LoggingConf
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		start := time.Now()
 
+		// Extract metadata
+		metadataAttrs := extractMetadata(ctx)
+
 		// Log incoming request
 		if config.LogPayloads {
 			reqJSON := formatMessageWithLimit(req, config.MaxPayloadSize)
-			logger.Log(ctx, config.LogLevel, "gRPC request",
+			logAttrs := []any{
 				"method", info.FullMethod,
 				"request", reqJSON,
-			)
+			}
+			logAttrs = append(logAttrs, metadataAttrs...)
+			logger.Log(ctx, config.LogLevel, "gRPC request", logAttrs...)
 		} else {
-			logger.Log(ctx, config.LogLevel, "gRPC request",
+			logAttrs := []any{
 				"method", info.FullMethod,
-			)
+			}
+			logAttrs = append(logAttrs, metadataAttrs...)
+			logger.Log(ctx, config.LogLevel, "gRPC request", logAttrs...)
 		}
 
 		// Call the handler
@@ -206,20 +230,24 @@ func ConfigurableLoggingUnaryInterceptor(logger *slog.Logger, config LoggingConf
 
 		if config.LogPayloads {
 			respJSON := formatMessageWithLimit(resp, config.MaxPayloadSize)
-			logger.Log(ctx, config.LogLevel, "gRPC response",
+			logAttrs := []any{
 				"method", info.FullMethod,
 				"duration", duration.String(),
 				"code", grpcCode.String(),
 				"error", errMsg,
 				"response", respJSON,
-			)
+			}
+			logAttrs = append(logAttrs, metadataAttrs...)
+			logger.Log(ctx, config.LogLevel, "gRPC response", logAttrs...)
 		} else {
-			logger.Log(ctx, config.LogLevel, "gRPC response",
+			logAttrs := []any{
 				"method", info.FullMethod,
 				"duration", duration.String(),
 				"code", grpcCode.String(),
 				"error", errMsg,
-			)
+			}
+			logAttrs = append(logAttrs, metadataAttrs...)
+			logger.Log(ctx, config.LogLevel, "gRPC response", logAttrs...)
 		}
 
 		return resp, err
@@ -233,4 +261,45 @@ func formatMessageWithLimit(msg any, maxSize int) string {
 		return formatted[:maxSize] + "...[truncated]"
 	}
 	return formatted
+}
+
+// extractMetadata extracts useful metadata from the gRPC context.
+func extractMetadata(ctx context.Context) []any {
+	attrs := make([]any, 0)
+
+	// Extract peer information (client address)
+	if p, ok := peer.FromContext(ctx); ok {
+		attrs = append(attrs, "remote_addr", p.Addr.String())
+	}
+
+	// Extract metadata (headers)
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		// User-Agent
+		if ua := md.Get("user-agent"); len(ua) > 0 {
+			attrs = append(attrs, "user_agent", ua[0])
+		}
+
+		// Authorization (just indicate presence, don't log the token)
+		if auth := md.Get("authorization"); len(auth) > 0 {
+			attrs = append(attrs, "has_auth", true)
+			attrs = append(attrs, "authorization", auth[0])
+		}
+
+		// Content-Type
+		if ct := md.Get("content-type"); len(ct) > 0 {
+			attrs = append(attrs, "content_type", ct[0])
+		}
+
+		// X-Forwarded-For (for proxied requests)
+		if xff := md.Get("x-forwarded-for"); len(xff) > 0 {
+			attrs = append(attrs, "x_forwarded_for", xff[0])
+		}
+
+		// Request ID (if present)
+		if reqID := md.Get("x-request-id"); len(reqID) > 0 {
+			attrs = append(attrs, "request_id", reqID[0])
+		}
+	}
+
+	return attrs
 }

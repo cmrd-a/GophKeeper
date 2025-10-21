@@ -3,6 +3,7 @@ package tui
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -51,6 +52,10 @@ type App struct {
 	state  AppState
 	width  int
 	height int
+
+	// Build information
+	version   string
+	buildDate string
 
 	// Authentication
 	isAuthenticated bool
@@ -116,6 +121,12 @@ func NewApp(client Client) *App {
 	app.viewItemScreen = NewViewItemScreen()
 
 	return app
+}
+
+// SetBuildInfo sets the build information for the app
+func (a *App) SetBuildInfo(version, buildDate string) {
+	a.version = version
+	a.buildDate = buildDate
 }
 
 // Init initializes the application
@@ -189,11 +200,13 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.clearMessage()
 
 	case ItemSavedMsg:
+		log.Printf("Item saved successfully!")
 		a.state = StateMain
 		a.setMessage("Item saved successfully!", MessageSuccess)
 		return a, a.loadVaultItems()
 
 	case ItemSaveErrorMsg:
+		log.Printf("Item save error: %s", msg.Error)
 		a.setMessage(fmt.Sprintf("Failed to save item: %s", msg.Error), MessageError)
 
 	case ViewItemMsg:
@@ -224,6 +237,7 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.clearMessage()
 
 	case SaveItemAttemptMsg:
+		log.Printf("Received SaveItemAttemptMsg for type: %v", msg.Type)
 		return a, a.performSaveItem(msg)
 
 	case DeleteItemAttemptMsg:
@@ -267,7 +281,14 @@ func (a *App) View() string {
 	var content string
 
 	// Header
-	header := titleStyle.Render("🔐 GophKeeper Client")
+	headerText := "🔐 GophKeeper Client"
+	if a.version != "" && a.version != "dev" {
+		headerText += fmt.Sprintf(" v%s", a.version)
+	}
+	if a.buildDate != "" && a.buildDate != "unknown" {
+		headerText += fmt.Sprintf(" (%s)", a.buildDate)
+	}
+	header := titleStyle.Render(headerText)
 
 	// Main content based on state
 	switch a.state {
@@ -355,7 +376,7 @@ func (a *App) clearMessage() {
 func (a *App) getHelpText() string {
 	switch a.state {
 	case StateLogin:
-		return "Tab/Shift+Tab: Navigate • Enter: Submit • Ctrl+C: Quit"
+		return "Tab/Shift+Tab: Navigate • Enter: Submit • --version: Show version • Ctrl+C: Quit"
 	case StateMain:
 		return "↑/↓: Navigate • Enter: View item • a: Add item • d: Delete item • q: Quit"
 	case StateAddItem:
@@ -413,6 +434,14 @@ func (a *App) performRegister(login, password string) tea.Cmd {
 // performSaveItem handles saving vault items
 func (a *App) performSaveItem(msg SaveItemAttemptMsg) tea.Cmd {
 	return func() tea.Msg {
+		log.Printf("performSaveItem executing for type: %v", msg.Type)
+
+		// Check if user is authenticated first
+		if !a.isAuthenticated {
+			log.Printf("User not authenticated, cannot save item")
+			return ItemSaveErrorMsg{Error: "Please login first to save items"}
+		}
+
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
@@ -422,11 +451,13 @@ func (a *App) performSaveItem(msg SaveItemAttemptMsg) tea.Cmd {
 			data := msg.Data
 			login := data["login"].(string)
 			password := data["password"].(string)
+			log.Printf("Calling client.SaveLoginPassword with login: %s", login)
 			_, err = a.client.SaveLoginPassword(ctx, login, password)
 
 		case TypeTextData:
 			data := msg.Data
 			text := data["text"].(string)
+			log.Printf("Calling client.SaveTextData with text length: %d", len(text))
 			_, err = a.client.SaveTextData(ctx, text)
 
 		case TypeCardData:
@@ -435,17 +466,26 @@ func (a *App) performSaveItem(msg SaveItemAttemptMsg) tea.Cmd {
 			holder := data["holder"].(string)
 			expire := data["expire"].(string)
 			cvv := data["cvv"].(string)
+			log.Printf("Calling client.SaveCardData with holder: %s", holder)
 			_, err = a.client.SaveCardData(ctx, number, holder, expire, cvv)
 
 		case TypeBinaryData:
 			data := msg.Data
 			binaryData := data["data"].([]byte)
+			log.Printf("Calling client.SaveBinaryData with %d bytes", len(binaryData))
 			_, err = a.client.SaveBinaryData(ctx, binaryData)
 		}
 
 		if err != nil {
+			log.Printf("Save operation failed: %v", err)
+			// Check if it's an authentication error
+			if strings.Contains(err.Error(), "unauthenticated") || strings.Contains(err.Error(), "not authenticated") {
+				a.isAuthenticated = false
+				return ItemSaveErrorMsg{Error: "Session expired. Please login again."}
+			}
 			return ItemSaveErrorMsg{Error: err.Error()}
 		}
+		log.Printf("Save operation successful")
 		return ItemSavedMsg{}
 	}
 }
