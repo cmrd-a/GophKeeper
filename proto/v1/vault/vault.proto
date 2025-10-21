@@ -1,0 +1,219 @@
+syntax = "proto3";
+package v1.vault;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/cmrd-a/GophKeeper/gen/proto/v1/vault;vault";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "GophKeeper API";
+    version: "1.0.0";
+    description: "GophKeeper password manager API";
+  };
+  security_definitions: {
+    security: {
+      key: "Bearer";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "Authorization";
+        description: "Enter your bearer token in the format: Bearer {token}";
+      }
+    }
+  }
+};
+
+// VaultService service definition
+service VaultService {
+  rpc GetVaultItems(GetVaultItemsRequest) returns (GetVaultItemsResponse) {
+    option (google.api.http) = {get: "/api/v1/vault/items"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+
+  rpc SaveLoginPassword(SaveLoginPasswordRequest) returns (SaveLoginPasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/login-password"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+
+  rpc SaveTextData(SaveTextDataRequest) returns (SaveTextDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/text"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+
+  rpc SaveBinaryData(SaveBinaryDataRequest) returns (SaveBinaryDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/binary"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+
+  rpc SaveCardData(SaveCardDataRequest) returns (SaveCardDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/card"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+
+  rpc SaveMeta(SaveMetaRequest) returns (SaveMetaResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vault/meta"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+
+  rpc DeleteVaultItem(DeleteVaultItemRequest) returns (DeleteVaultItemResponse) {
+    option (google.api.http) = {delete: "/api/v1/vault/item/{id}"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
+  }
+}
+
+message GetVaultItemsRequest {}
+
+message GetVaultItemsResponse {
+  repeated LoginPassword login_passwords = 1;
+  repeated TextData text_data = 2;
+  repeated BinaryData binary_data = 3;
+  repeated CardData card_data = 4;
+  map<string, Meta> meta = 5;
+}
+
+message SaveLoginPasswordRequest {
+  string login = 1;
+  string password = 2;
+}
+
+message SaveLoginPasswordResponse {
+  string id = 1;
+}
+
+message SaveTextDataRequest {
+  string text = 1;
+}
+
+message SaveTextDataResponse {
+  string id = 1;
+}
+
+message SaveBinaryDataRequest {
+  bytes data = 1;
+}
+
+message SaveBinaryDataResponse {
+  string id = 1;
+}
+
+message SaveCardDataRequest {
+  string number = 1;
+  string holder = 2;
+  string expire = 3;
+  string cvv = 4;
+}
+
+message SaveCardDataResponse {
+  string id = 1;
+}
+
+message SaveMetaRequest {
+  repeated Meta meta = 1;
+}
+
+message SaveMetaResponse {}
+
+message DeleteVaultItemRequest {
+  string id = 1;
+  string type = 2;
+}
+
+message DeleteVaultItemResponse {}
+
+message VaultItem {
+  string id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp updated_at = 3;
+  string user_id = 4;
+}
+
+message Meta {
+  VaultItem base = 1;
+  string key = 2;
+  string value = 3;
+  string item_id = 4;
+}
+
+message LoginPassword {
+  VaultItem base = 1;
+  string login = 2;
+  string password = 3;
+}
+
+message TextData {
+  VaultItem base = 1;
+  string text = 2;
+}
+
+message BinaryData {
+  VaultItem base = 1;
+  bytes data = 2;
+}
+
+message CardData {
+  VaultItem base = 1;
+  string number = 2;
+  string holder = 3;
+  string expire = 4;
+  string cvv = 5;
+}
