@@ -7,6 +7,7 @@
 package vault
 
 import (
+	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -23,382 +24,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type VaultItem struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	UserId        string                 `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VaultItem) Reset() {
-	*x = VaultItem{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VaultItem) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VaultItem) ProtoMessage() {}
-
-func (x *VaultItem) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VaultItem.ProtoReflect.Descriptor instead.
-func (*VaultItem) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *VaultItem) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *VaultItem) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *VaultItem) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
-func (x *VaultItem) GetUserId() string {
-	if x != nil {
-		return x.UserId
-	}
-	return ""
-}
-
-type Meta struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
-	ItemId        string                 `protobuf:"bytes,4,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Meta) Reset() {
-	*x = Meta{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Meta) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Meta) ProtoMessage() {}
-
-func (x *Meta) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Meta.ProtoReflect.Descriptor instead.
-func (*Meta) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Meta) GetBase() *VaultItem {
-	if x != nil {
-		return x.Base
-	}
-	return nil
-}
-
-func (x *Meta) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *Meta) GetValue() string {
-	if x != nil {
-		return x.Value
-	}
-	return ""
-}
-
-func (x *Meta) GetItemId() string {
-	if x != nil {
-		return x.ItemId
-	}
-	return ""
-}
-
-type LoginPassword struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Login         string                 `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *LoginPassword) Reset() {
-	*x = LoginPassword{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LoginPassword) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LoginPassword) ProtoMessage() {}
-
-func (x *LoginPassword) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LoginPassword.ProtoReflect.Descriptor instead.
-func (*LoginPassword) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *LoginPassword) GetBase() *VaultItem {
-	if x != nil {
-		return x.Base
-	}
-	return nil
-}
-
-func (x *LoginPassword) GetLogin() string {
-	if x != nil {
-		return x.Login
-	}
-	return ""
-}
-
-func (x *LoginPassword) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-type TextData struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TextData) Reset() {
-	*x = TextData{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TextData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TextData) ProtoMessage() {}
-
-func (x *TextData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TextData.ProtoReflect.Descriptor instead.
-func (*TextData) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *TextData) GetBase() *VaultItem {
-	if x != nil {
-		return x.Base
-	}
-	return nil
-}
-
-func (x *TextData) GetText() string {
-	if x != nil {
-		return x.Text
-	}
-	return ""
-}
-
-type BinaryData struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *BinaryData) Reset() {
-	*x = BinaryData{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *BinaryData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*BinaryData) ProtoMessage() {}
-
-func (x *BinaryData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use BinaryData.ProtoReflect.Descriptor instead.
-func (*BinaryData) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *BinaryData) GetBase() *VaultItem {
-	if x != nil {
-		return x.Base
-	}
-	return nil
-}
-
-func (x *BinaryData) GetData() []byte {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type CardData struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Number        string                 `protobuf:"bytes,2,opt,name=number,proto3" json:"number,omitempty"`
-	Holder        string                 `protobuf:"bytes,3,opt,name=holder,proto3" json:"holder,omitempty"`
-	Expire        string                 `protobuf:"bytes,4,opt,name=expire,proto3" json:"expire,omitempty"`
-	Cvv           string                 `protobuf:"bytes,5,opt,name=cvv,proto3" json:"cvv,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CardData) Reset() {
-	*x = CardData{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CardData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CardData) ProtoMessage() {}
-
-func (x *CardData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CardData.ProtoReflect.Descriptor instead.
-func (*CardData) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *CardData) GetBase() *VaultItem {
-	if x != nil {
-		return x.Base
-	}
-	return nil
-}
-
-func (x *CardData) GetNumber() string {
-	if x != nil {
-		return x.Number
-	}
-	return ""
-}
-
-func (x *CardData) GetHolder() string {
-	if x != nil {
-		return x.Holder
-	}
-	return ""
-}
-
-func (x *CardData) GetExpire() string {
-	if x != nil {
-		return x.Expire
-	}
-	return ""
-}
-
-func (x *CardData) GetCvv() string {
-	if x != nil {
-		return x.Cvv
-	}
-	return ""
-}
-
 type GetVaultItemsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -407,7 +32,7 @@ type GetVaultItemsRequest struct {
 
 func (x *GetVaultItemsRequest) Reset() {
 	*x = GetVaultItemsRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[6]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +44,7 @@ func (x *GetVaultItemsRequest) String() string {
 func (*GetVaultItemsRequest) ProtoMessage() {}
 
 func (x *GetVaultItemsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[6]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +57,7 @@ func (x *GetVaultItemsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVaultItemsRequest.ProtoReflect.Descriptor instead.
 func (*GetVaultItemsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{6}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{0}
 }
 
 type GetVaultItemsResponse struct {
@@ -448,7 +73,7 @@ type GetVaultItemsResponse struct {
 
 func (x *GetVaultItemsResponse) Reset() {
 	*x = GetVaultItemsResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[7]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -460,7 +85,7 @@ func (x *GetVaultItemsResponse) String() string {
 func (*GetVaultItemsResponse) ProtoMessage() {}
 
 func (x *GetVaultItemsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[7]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -473,7 +98,7 @@ func (x *GetVaultItemsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetVaultItemsResponse.ProtoReflect.Descriptor instead.
 func (*GetVaultItemsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{7}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetVaultItemsResponse) GetLoginPasswords() []*LoginPassword {
@@ -521,7 +146,7 @@ type SaveLoginPasswordRequest struct {
 
 func (x *SaveLoginPasswordRequest) Reset() {
 	*x = SaveLoginPasswordRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[8]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -533,7 +158,7 @@ func (x *SaveLoginPasswordRequest) String() string {
 func (*SaveLoginPasswordRequest) ProtoMessage() {}
 
 func (x *SaveLoginPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[8]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -546,7 +171,7 @@ func (x *SaveLoginPasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveLoginPasswordRequest.ProtoReflect.Descriptor instead.
 func (*SaveLoginPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{8}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SaveLoginPasswordRequest) GetLogin() string {
@@ -572,7 +197,7 @@ type SaveLoginPasswordResponse struct {
 
 func (x *SaveLoginPasswordResponse) Reset() {
 	*x = SaveLoginPasswordResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[9]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -584,7 +209,7 @@ func (x *SaveLoginPasswordResponse) String() string {
 func (*SaveLoginPasswordResponse) ProtoMessage() {}
 
 func (x *SaveLoginPasswordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[9]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -597,7 +222,7 @@ func (x *SaveLoginPasswordResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveLoginPasswordResponse.ProtoReflect.Descriptor instead.
 func (*SaveLoginPasswordResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{9}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SaveLoginPasswordResponse) GetId() string {
@@ -616,7 +241,7 @@ type SaveTextDataRequest struct {
 
 func (x *SaveTextDataRequest) Reset() {
 	*x = SaveTextDataRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[10]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -628,7 +253,7 @@ func (x *SaveTextDataRequest) String() string {
 func (*SaveTextDataRequest) ProtoMessage() {}
 
 func (x *SaveTextDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[10]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -641,7 +266,7 @@ func (x *SaveTextDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveTextDataRequest.ProtoReflect.Descriptor instead.
 func (*SaveTextDataRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{10}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SaveTextDataRequest) GetText() string {
@@ -660,7 +285,7 @@ type SaveTextDataResponse struct {
 
 func (x *SaveTextDataResponse) Reset() {
 	*x = SaveTextDataResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[11]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -672,7 +297,7 @@ func (x *SaveTextDataResponse) String() string {
 func (*SaveTextDataResponse) ProtoMessage() {}
 
 func (x *SaveTextDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[11]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,7 +310,7 @@ func (x *SaveTextDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveTextDataResponse.ProtoReflect.Descriptor instead.
 func (*SaveTextDataResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{11}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SaveTextDataResponse) GetId() string {
@@ -704,7 +329,7 @@ type SaveBinaryDataRequest struct {
 
 func (x *SaveBinaryDataRequest) Reset() {
 	*x = SaveBinaryDataRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[12]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -716,7 +341,7 @@ func (x *SaveBinaryDataRequest) String() string {
 func (*SaveBinaryDataRequest) ProtoMessage() {}
 
 func (x *SaveBinaryDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[12]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -729,7 +354,7 @@ func (x *SaveBinaryDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveBinaryDataRequest.ProtoReflect.Descriptor instead.
 func (*SaveBinaryDataRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{12}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *SaveBinaryDataRequest) GetData() []byte {
@@ -748,7 +373,7 @@ type SaveBinaryDataResponse struct {
 
 func (x *SaveBinaryDataResponse) Reset() {
 	*x = SaveBinaryDataResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[13]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -760,7 +385,7 @@ func (x *SaveBinaryDataResponse) String() string {
 func (*SaveBinaryDataResponse) ProtoMessage() {}
 
 func (x *SaveBinaryDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[13]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -773,7 +398,7 @@ func (x *SaveBinaryDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveBinaryDataResponse.ProtoReflect.Descriptor instead.
 func (*SaveBinaryDataResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{13}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *SaveBinaryDataResponse) GetId() string {
@@ -795,7 +420,7 @@ type SaveCardDataRequest struct {
 
 func (x *SaveCardDataRequest) Reset() {
 	*x = SaveCardDataRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[14]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -807,7 +432,7 @@ func (x *SaveCardDataRequest) String() string {
 func (*SaveCardDataRequest) ProtoMessage() {}
 
 func (x *SaveCardDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[14]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -820,7 +445,7 @@ func (x *SaveCardDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveCardDataRequest.ProtoReflect.Descriptor instead.
 func (*SaveCardDataRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{14}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *SaveCardDataRequest) GetNumber() string {
@@ -860,7 +485,7 @@ type SaveCardDataResponse struct {
 
 func (x *SaveCardDataResponse) Reset() {
 	*x = SaveCardDataResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[15]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -872,7 +497,7 @@ func (x *SaveCardDataResponse) String() string {
 func (*SaveCardDataResponse) ProtoMessage() {}
 
 func (x *SaveCardDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[15]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -885,7 +510,7 @@ func (x *SaveCardDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveCardDataResponse.ProtoReflect.Descriptor instead.
 func (*SaveCardDataResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{15}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *SaveCardDataResponse) GetId() string {
@@ -904,7 +529,7 @@ type SaveMetaRequest struct {
 
 func (x *SaveMetaRequest) Reset() {
 	*x = SaveMetaRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[16]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -916,7 +541,7 @@ func (x *SaveMetaRequest) String() string {
 func (*SaveMetaRequest) ProtoMessage() {}
 
 func (x *SaveMetaRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[16]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -929,7 +554,7 @@ func (x *SaveMetaRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveMetaRequest.ProtoReflect.Descriptor instead.
 func (*SaveMetaRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{16}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *SaveMetaRequest) GetMeta() []*Meta {
@@ -947,7 +572,7 @@ type SaveMetaResponse struct {
 
 func (x *SaveMetaResponse) Reset() {
 	*x = SaveMetaResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[17]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -959,7 +584,7 @@ func (x *SaveMetaResponse) String() string {
 func (*SaveMetaResponse) ProtoMessage() {}
 
 func (x *SaveMetaResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[17]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -972,7 +597,7 @@ func (x *SaveMetaResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveMetaResponse.ProtoReflect.Descriptor instead.
 func (*SaveMetaResponse) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{17}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{11}
 }
 
 type DeleteVaultItemRequest struct {
@@ -985,7 +610,7 @@ type DeleteVaultItemRequest struct {
 
 func (x *DeleteVaultItemRequest) Reset() {
 	*x = DeleteVaultItemRequest{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[18]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -997,7 +622,7 @@ func (x *DeleteVaultItemRequest) String() string {
 func (*DeleteVaultItemRequest) ProtoMessage() {}
 
 func (x *DeleteVaultItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[18]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1010,7 +635,7 @@ func (x *DeleteVaultItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteVaultItemRequest.ProtoReflect.Descriptor instead.
 func (*DeleteVaultItemRequest) Descriptor() ([]byte, []int) {
-	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{18}
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeleteVaultItemRequest) GetId() string {
@@ -1035,7 +660,7 @@ type DeleteVaultItemResponse struct {
 
 func (x *DeleteVaultItemResponse) Reset() {
 	*x = DeleteVaultItemResponse{}
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[19]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1047,7 +672,7 @@ func (x *DeleteVaultItemResponse) String() string {
 func (*DeleteVaultItemResponse) ProtoMessage() {}
 
 func (x *DeleteVaultItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_v1_vault_vault_proto_msgTypes[19]
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1060,43 +685,390 @@ func (x *DeleteVaultItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteVaultItemResponse.ProtoReflect.Descriptor instead.
 func (*DeleteVaultItemResponse) Descriptor() ([]byte, []int) {
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{13}
+}
+
+type VaultItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UserId        string                 `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VaultItem) Reset() {
+	*x = VaultItem{}
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VaultItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VaultItem) ProtoMessage() {}
+
+func (x *VaultItem) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VaultItem.ProtoReflect.Descriptor instead.
+func (*VaultItem) Descriptor() ([]byte, []int) {
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *VaultItem) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *VaultItem) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *VaultItem) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *VaultItem) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type Meta struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	ItemId        string                 `protobuf:"bytes,4,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Meta) Reset() {
+	*x = Meta{}
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Meta) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Meta) ProtoMessage() {}
+
+func (x *Meta) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Meta.ProtoReflect.Descriptor instead.
+func (*Meta) Descriptor() ([]byte, []int) {
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *Meta) GetBase() *VaultItem {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *Meta) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *Meta) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *Meta) GetItemId() string {
+	if x != nil {
+		return x.ItemId
+	}
+	return ""
+}
+
+type LoginPassword struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Login         string                 `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoginPassword) Reset() {
+	*x = LoginPassword{}
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoginPassword) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoginPassword) ProtoMessage() {}
+
+func (x *LoginPassword) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoginPassword.ProtoReflect.Descriptor instead.
+func (*LoginPassword) Descriptor() ([]byte, []int) {
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *LoginPassword) GetBase() *VaultItem {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *LoginPassword) GetLogin() string {
+	if x != nil {
+		return x.Login
+	}
+	return ""
+}
+
+func (x *LoginPassword) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type TextData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TextData) Reset() {
+	*x = TextData{}
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TextData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TextData) ProtoMessage() {}
+
+func (x *TextData) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TextData.ProtoReflect.Descriptor instead.
+func (*TextData) Descriptor() ([]byte, []int) {
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *TextData) GetBase() *VaultItem {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *TextData) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+type BinaryData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BinaryData) Reset() {
+	*x = BinaryData{}
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BinaryData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BinaryData) ProtoMessage() {}
+
+func (x *BinaryData) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BinaryData.ProtoReflect.Descriptor instead.
+func (*BinaryData) Descriptor() ([]byte, []int) {
+	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *BinaryData) GetBase() *VaultItem {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *BinaryData) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CardData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *VaultItem             `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Number        string                 `protobuf:"bytes,2,opt,name=number,proto3" json:"number,omitempty"`
+	Holder        string                 `protobuf:"bytes,3,opt,name=holder,proto3" json:"holder,omitempty"`
+	Expire        string                 `protobuf:"bytes,4,opt,name=expire,proto3" json:"expire,omitempty"`
+	Cvv           string                 `protobuf:"bytes,5,opt,name=cvv,proto3" json:"cvv,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CardData) Reset() {
+	*x = CardData{}
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CardData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CardData) ProtoMessage() {}
+
+func (x *CardData) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_vault_vault_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CardData.ProtoReflect.Descriptor instead.
+func (*CardData) Descriptor() ([]byte, []int) {
 	return file_proto_v1_vault_vault_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *CardData) GetBase() *VaultItem {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *CardData) GetNumber() string {
+	if x != nil {
+		return x.Number
+	}
+	return ""
+}
+
+func (x *CardData) GetHolder() string {
+	if x != nil {
+		return x.Holder
+	}
+	return ""
+}
+
+func (x *CardData) GetExpire() string {
+	if x != nil {
+		return x.Expire
+	}
+	return ""
+}
+
+func (x *CardData) GetCvv() string {
+	if x != nil {
+		return x.Cvv
+	}
+	return ""
 }
 
 var File_proto_v1_vault_vault_proto protoreflect.FileDescriptor
 
 const file_proto_v1_vault_vault_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/v1/vault/vault.proto\x12\bv1.vault\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xaa\x01\n" +
-	"\tVaultItem\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x129\n" +
-	"\n" +
-	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x17\n" +
-	"\auser_id\x18\x04 \x01(\tR\x06userId\"p\n" +
-	"\x04Meta\x12'\n" +
-	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\tR\x05value\x12\x17\n" +
-	"\aitem_id\x18\x04 \x01(\tR\x06itemId\"j\n" +
-	"\rLoginPassword\x12'\n" +
-	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x14\n" +
-	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"G\n" +
-	"\bTextData\x12'\n" +
-	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x12\n" +
-	"\x04text\x18\x02 \x01(\tR\x04text\"I\n" +
-	"\n" +
-	"BinaryData\x12'\n" +
-	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\"\x8d\x01\n" +
-	"\bCardData\x12'\n" +
-	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x16\n" +
-	"\x06number\x18\x02 \x01(\tR\x06number\x12\x16\n" +
-	"\x06holder\x18\x03 \x01(\tR\x06holder\x12\x16\n" +
-	"\x06expire\x18\x04 \x01(\tR\x06expire\x12\x10\n" +
-	"\x03cvv\x18\x05 \x01(\tR\x03cvv\"\x16\n" +
+	"\x1aproto/v1/vault/vault.proto\x12\bv1.vault\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\x16\n" +
 	"\x14GetVaultItemsRequest\"\xfa\x02\n" +
 	"\x15GetVaultItemsResponse\x12@\n" +
 	"\x0flogin_passwords\x18\x01 \x03(\v2\x17.v1.vault.LoginPasswordR\x0eloginPasswords\x12/\n" +
@@ -1134,15 +1106,68 @@ const file_proto_v1_vault_vault_proto_rawDesc = "" +
 	"\x16DeleteVaultItemRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04type\x18\x02 \x01(\tR\x04type\"\x19\n" +
-	"\x17DeleteVaultItemResponse2\xb2\x06\n" +
-	"\fVaultService\x12m\n" +
-	"\rGetVaultItems\x12\x1e.v1.vault.GetVaultItemsRequest\x1a\x1f.v1.vault.GetVaultItemsResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/vault/items\x12\x85\x01\n" +
-	"\x11SaveLoginPassword\x12\".v1.vault.SaveLoginPasswordRequest\x1a#.v1.vault.SaveLoginPasswordResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/api/v1/vault/login-password\x12l\n" +
-	"\fSaveTextData\x12\x1d.v1.vault.SaveTextDataRequest\x1a\x1e.v1.vault.SaveTextDataResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vault/text\x12t\n" +
-	"\x0eSaveBinaryData\x12\x1f.v1.vault.SaveBinaryDataRequest\x1a .v1.vault.SaveBinaryDataResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/api/v1/vault/binary\x12l\n" +
-	"\fSaveCardData\x12\x1d.v1.vault.SaveCardDataRequest\x1a\x1e.v1.vault.SaveCardDataResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vault/card\x12`\n" +
-	"\bSaveMeta\x12\x19.v1.vault.SaveMetaRequest\x1a\x1a.v1.vault.SaveMetaResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vault/meta\x12w\n" +
-	"\x0fDeleteVaultItem\x12 .v1.vault.DeleteVaultItemRequest\x1a!.v1.vault.DeleteVaultItemResponse\"\x1f\x82\xd3\xe4\x93\x02\x19*\x17/api/v1/vault/item/{id}B7Z5github.com/cmrd-a/GophKeeper/gen/proto/v1/vault;vaultb\x06proto3"
+	"\x17DeleteVaultItemResponse\"\xaa\x01\n" +
+	"\tVaultItem\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x129\n" +
+	"\n" +
+	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x17\n" +
+	"\auser_id\x18\x04 \x01(\tR\x06userId\"p\n" +
+	"\x04Meta\x12'\n" +
+	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x10\n" +
+	"\x03key\x18\x02 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x03 \x01(\tR\x05value\x12\x17\n" +
+	"\aitem_id\x18\x04 \x01(\tR\x06itemId\"j\n" +
+	"\rLoginPassword\x12'\n" +
+	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x14\n" +
+	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\"G\n" +
+	"\bTextData\x12'\n" +
+	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x12\n" +
+	"\x04text\x18\x02 \x01(\tR\x04text\"I\n" +
+	"\n" +
+	"BinaryData\x12'\n" +
+	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\x8d\x01\n" +
+	"\bCardData\x12'\n" +
+	"\x04base\x18\x01 \x01(\v2\x13.v1.vault.VaultItemR\x04base\x12\x16\n" +
+	"\x06number\x18\x02 \x01(\tR\x06number\x12\x16\n" +
+	"\x06holder\x18\x03 \x01(\tR\x06holder\x12\x16\n" +
+	"\x06expire\x18\x04 \x01(\tR\x06expire\x12\x10\n" +
+	"\x03cvv\x18\x05 \x01(\tR\x03cvv2\xab\a\n" +
+	"\fVaultService\x12~\n" +
+	"\rGetVaultItems\x12\x1e.v1.vault.GetVaultItemsRequest\x1a\x1f.v1.vault.GetVaultItemsResponse\",\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/vault/items\x12\x96\x01\n" +
+	"\x11SaveLoginPassword\x12\".v1.vault.SaveLoginPasswordRequest\x1a#.v1.vault.SaveLoginPasswordResponse\"8\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/api/v1/vault/login-password\x12}\n" +
+	"\fSaveTextData\x12\x1d.v1.vault.SaveTextDataRequest\x1a\x1e.v1.vault.SaveTextDataResponse\".\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vault/text\x12\x85\x01\n" +
+	"\x0eSaveBinaryData\x12\x1f.v1.vault.SaveBinaryDataRequest\x1a .v1.vault.SaveBinaryDataResponse\"0\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/api/v1/vault/binary\x12}\n" +
+	"\fSaveCardData\x12\x1d.v1.vault.SaveCardDataRequest\x1a\x1e.v1.vault.SaveCardDataResponse\".\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vault/card\x12q\n" +
+	"\bSaveMeta\x12\x19.v1.vault.SaveMetaRequest\x1a\x1a.v1.vault.SaveMetaResponse\".\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vault/meta\x12\x88\x01\n" +
+	"\x0fDeleteVaultItem\x12 .v1.vault.DeleteVaultItemRequest\x1a!.v1.vault.DeleteVaultItemResponse\"0\x92A\x0eb\f\n" +
+	"\n" +
+	"\n" +
+	"\x06Bearer\x12\x00\x82\xd3\xe4\x93\x02\x19*\x17/api/v1/vault/item/{id}B\xcd\x01\x92A\x92\x01\x128\n" +
+	"\x0eGophKeeper API\x12\x1fGophKeeper password manager API2\x051.0.0ZV\n" +
+	"T\n" +
+	"\x06Bearer\x12J\b\x02\x125Enter your bearer token in the format: Bearer {token}\x1a\rAuthorization \x02Z5github.com/cmrd-a/GophKeeper/gen/proto/v1/vault;vaultb\x06proto3"
 
 var (
 	file_proto_v1_vault_vault_proto_rawDescOnce sync.Once
@@ -1158,58 +1183,58 @@ func file_proto_v1_vault_vault_proto_rawDescGZIP() []byte {
 
 var file_proto_v1_vault_vault_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_proto_v1_vault_vault_proto_goTypes = []any{
-	(*VaultItem)(nil),                 // 0: v1.vault.VaultItem
-	(*Meta)(nil),                      // 1: v1.vault.Meta
-	(*LoginPassword)(nil),             // 2: v1.vault.LoginPassword
-	(*TextData)(nil),                  // 3: v1.vault.TextData
-	(*BinaryData)(nil),                // 4: v1.vault.BinaryData
-	(*CardData)(nil),                  // 5: v1.vault.CardData
-	(*GetVaultItemsRequest)(nil),      // 6: v1.vault.GetVaultItemsRequest
-	(*GetVaultItemsResponse)(nil),     // 7: v1.vault.GetVaultItemsResponse
-	(*SaveLoginPasswordRequest)(nil),  // 8: v1.vault.SaveLoginPasswordRequest
-	(*SaveLoginPasswordResponse)(nil), // 9: v1.vault.SaveLoginPasswordResponse
-	(*SaveTextDataRequest)(nil),       // 10: v1.vault.SaveTextDataRequest
-	(*SaveTextDataResponse)(nil),      // 11: v1.vault.SaveTextDataResponse
-	(*SaveBinaryDataRequest)(nil),     // 12: v1.vault.SaveBinaryDataRequest
-	(*SaveBinaryDataResponse)(nil),    // 13: v1.vault.SaveBinaryDataResponse
-	(*SaveCardDataRequest)(nil),       // 14: v1.vault.SaveCardDataRequest
-	(*SaveCardDataResponse)(nil),      // 15: v1.vault.SaveCardDataResponse
-	(*SaveMetaRequest)(nil),           // 16: v1.vault.SaveMetaRequest
-	(*SaveMetaResponse)(nil),          // 17: v1.vault.SaveMetaResponse
-	(*DeleteVaultItemRequest)(nil),    // 18: v1.vault.DeleteVaultItemRequest
-	(*DeleteVaultItemResponse)(nil),   // 19: v1.vault.DeleteVaultItemResponse
+	(*GetVaultItemsRequest)(nil),      // 0: v1.vault.GetVaultItemsRequest
+	(*GetVaultItemsResponse)(nil),     // 1: v1.vault.GetVaultItemsResponse
+	(*SaveLoginPasswordRequest)(nil),  // 2: v1.vault.SaveLoginPasswordRequest
+	(*SaveLoginPasswordResponse)(nil), // 3: v1.vault.SaveLoginPasswordResponse
+	(*SaveTextDataRequest)(nil),       // 4: v1.vault.SaveTextDataRequest
+	(*SaveTextDataResponse)(nil),      // 5: v1.vault.SaveTextDataResponse
+	(*SaveBinaryDataRequest)(nil),     // 6: v1.vault.SaveBinaryDataRequest
+	(*SaveBinaryDataResponse)(nil),    // 7: v1.vault.SaveBinaryDataResponse
+	(*SaveCardDataRequest)(nil),       // 8: v1.vault.SaveCardDataRequest
+	(*SaveCardDataResponse)(nil),      // 9: v1.vault.SaveCardDataResponse
+	(*SaveMetaRequest)(nil),           // 10: v1.vault.SaveMetaRequest
+	(*SaveMetaResponse)(nil),          // 11: v1.vault.SaveMetaResponse
+	(*DeleteVaultItemRequest)(nil),    // 12: v1.vault.DeleteVaultItemRequest
+	(*DeleteVaultItemResponse)(nil),   // 13: v1.vault.DeleteVaultItemResponse
+	(*VaultItem)(nil),                 // 14: v1.vault.VaultItem
+	(*Meta)(nil),                      // 15: v1.vault.Meta
+	(*LoginPassword)(nil),             // 16: v1.vault.LoginPassword
+	(*TextData)(nil),                  // 17: v1.vault.TextData
+	(*BinaryData)(nil),                // 18: v1.vault.BinaryData
+	(*CardData)(nil),                  // 19: v1.vault.CardData
 	nil,                               // 20: v1.vault.GetVaultItemsResponse.MetaEntry
 	(*timestamppb.Timestamp)(nil),     // 21: google.protobuf.Timestamp
 }
 var file_proto_v1_vault_vault_proto_depIdxs = []int32{
-	21, // 0: v1.vault.VaultItem.created_at:type_name -> google.protobuf.Timestamp
-	21, // 1: v1.vault.VaultItem.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: v1.vault.Meta.base:type_name -> v1.vault.VaultItem
-	0,  // 3: v1.vault.LoginPassword.base:type_name -> v1.vault.VaultItem
-	0,  // 4: v1.vault.TextData.base:type_name -> v1.vault.VaultItem
-	0,  // 5: v1.vault.BinaryData.base:type_name -> v1.vault.VaultItem
-	0,  // 6: v1.vault.CardData.base:type_name -> v1.vault.VaultItem
-	2,  // 7: v1.vault.GetVaultItemsResponse.login_passwords:type_name -> v1.vault.LoginPassword
-	3,  // 8: v1.vault.GetVaultItemsResponse.text_data:type_name -> v1.vault.TextData
-	4,  // 9: v1.vault.GetVaultItemsResponse.binary_data:type_name -> v1.vault.BinaryData
-	5,  // 10: v1.vault.GetVaultItemsResponse.card_data:type_name -> v1.vault.CardData
-	20, // 11: v1.vault.GetVaultItemsResponse.meta:type_name -> v1.vault.GetVaultItemsResponse.MetaEntry
-	1,  // 12: v1.vault.SaveMetaRequest.meta:type_name -> v1.vault.Meta
-	1,  // 13: v1.vault.GetVaultItemsResponse.MetaEntry.value:type_name -> v1.vault.Meta
-	6,  // 14: v1.vault.VaultService.GetVaultItems:input_type -> v1.vault.GetVaultItemsRequest
-	8,  // 15: v1.vault.VaultService.SaveLoginPassword:input_type -> v1.vault.SaveLoginPasswordRequest
-	10, // 16: v1.vault.VaultService.SaveTextData:input_type -> v1.vault.SaveTextDataRequest
-	12, // 17: v1.vault.VaultService.SaveBinaryData:input_type -> v1.vault.SaveBinaryDataRequest
-	14, // 18: v1.vault.VaultService.SaveCardData:input_type -> v1.vault.SaveCardDataRequest
-	16, // 19: v1.vault.VaultService.SaveMeta:input_type -> v1.vault.SaveMetaRequest
-	18, // 20: v1.vault.VaultService.DeleteVaultItem:input_type -> v1.vault.DeleteVaultItemRequest
-	7,  // 21: v1.vault.VaultService.GetVaultItems:output_type -> v1.vault.GetVaultItemsResponse
-	9,  // 22: v1.vault.VaultService.SaveLoginPassword:output_type -> v1.vault.SaveLoginPasswordResponse
-	11, // 23: v1.vault.VaultService.SaveTextData:output_type -> v1.vault.SaveTextDataResponse
-	13, // 24: v1.vault.VaultService.SaveBinaryData:output_type -> v1.vault.SaveBinaryDataResponse
-	15, // 25: v1.vault.VaultService.SaveCardData:output_type -> v1.vault.SaveCardDataResponse
-	17, // 26: v1.vault.VaultService.SaveMeta:output_type -> v1.vault.SaveMetaResponse
-	19, // 27: v1.vault.VaultService.DeleteVaultItem:output_type -> v1.vault.DeleteVaultItemResponse
+	16, // 0: v1.vault.GetVaultItemsResponse.login_passwords:type_name -> v1.vault.LoginPassword
+	17, // 1: v1.vault.GetVaultItemsResponse.text_data:type_name -> v1.vault.TextData
+	18, // 2: v1.vault.GetVaultItemsResponse.binary_data:type_name -> v1.vault.BinaryData
+	19, // 3: v1.vault.GetVaultItemsResponse.card_data:type_name -> v1.vault.CardData
+	20, // 4: v1.vault.GetVaultItemsResponse.meta:type_name -> v1.vault.GetVaultItemsResponse.MetaEntry
+	15, // 5: v1.vault.SaveMetaRequest.meta:type_name -> v1.vault.Meta
+	21, // 6: v1.vault.VaultItem.created_at:type_name -> google.protobuf.Timestamp
+	21, // 7: v1.vault.VaultItem.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 8: v1.vault.Meta.base:type_name -> v1.vault.VaultItem
+	14, // 9: v1.vault.LoginPassword.base:type_name -> v1.vault.VaultItem
+	14, // 10: v1.vault.TextData.base:type_name -> v1.vault.VaultItem
+	14, // 11: v1.vault.BinaryData.base:type_name -> v1.vault.VaultItem
+	14, // 12: v1.vault.CardData.base:type_name -> v1.vault.VaultItem
+	15, // 13: v1.vault.GetVaultItemsResponse.MetaEntry.value:type_name -> v1.vault.Meta
+	0,  // 14: v1.vault.VaultService.GetVaultItems:input_type -> v1.vault.GetVaultItemsRequest
+	2,  // 15: v1.vault.VaultService.SaveLoginPassword:input_type -> v1.vault.SaveLoginPasswordRequest
+	4,  // 16: v1.vault.VaultService.SaveTextData:input_type -> v1.vault.SaveTextDataRequest
+	6,  // 17: v1.vault.VaultService.SaveBinaryData:input_type -> v1.vault.SaveBinaryDataRequest
+	8,  // 18: v1.vault.VaultService.SaveCardData:input_type -> v1.vault.SaveCardDataRequest
+	10, // 19: v1.vault.VaultService.SaveMeta:input_type -> v1.vault.SaveMetaRequest
+	12, // 20: v1.vault.VaultService.DeleteVaultItem:input_type -> v1.vault.DeleteVaultItemRequest
+	1,  // 21: v1.vault.VaultService.GetVaultItems:output_type -> v1.vault.GetVaultItemsResponse
+	3,  // 22: v1.vault.VaultService.SaveLoginPassword:output_type -> v1.vault.SaveLoginPasswordResponse
+	5,  // 23: v1.vault.VaultService.SaveTextData:output_type -> v1.vault.SaveTextDataResponse
+	7,  // 24: v1.vault.VaultService.SaveBinaryData:output_type -> v1.vault.SaveBinaryDataResponse
+	9,  // 25: v1.vault.VaultService.SaveCardData:output_type -> v1.vault.SaveCardDataResponse
+	11, // 26: v1.vault.VaultService.SaveMeta:output_type -> v1.vault.SaveMetaResponse
+	13, // 27: v1.vault.VaultService.DeleteVaultItem:output_type -> v1.vault.DeleteVaultItemResponse
 	21, // [21:28] is the sub-list for method output_type
 	14, // [14:21] is the sub-list for method input_type
 	14, // [14:14] is the sub-list for extension type_name

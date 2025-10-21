@@ -1,15 +1,16 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/v1/user/user.proto",
-    "version": "version not set"
+    "title": "GophKeeper API",
+    "description": "GophKeeper password manager API",
+    "version": "1.0.0"
   },
   "tags": [
     {
-      "name": "UserService"
+      "name": "VaultService"
     },
     {
-      "name": "VaultService"
+      "name": "UserService"
     }
   ],
   "consumes": [
@@ -112,6 +113,11 @@
         ],
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -144,6 +150,11 @@
         ],
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -180,6 +191,11 @@
         ],
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -202,6 +218,11 @@
         },
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -234,6 +255,11 @@
         ],
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -266,6 +292,11 @@
         ],
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -298,6 +329,11 @@
         ],
         "tags": [
           "VaultService"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     }
@@ -590,6 +626,14 @@
           "type": "string"
         }
       }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "description": "Enter your bearer token in the format: Bearer {token}",
+      "name": "Authorization",
+      "in": "header"
     }
   }
 }

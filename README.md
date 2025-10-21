@@ -4,6 +4,7 @@ Yandex Practicum Go Advanced Graduate Work
 ## Инструкция по запуску
  - make demo
  - Демонстрационный пользователь `john` `password`
+ - Swagger UI - `http://localhost:8080`
 
 ### Системные зависимости для разработки
 - https://protobuf.dev/installation/

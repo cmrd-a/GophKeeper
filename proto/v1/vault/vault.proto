@@ -3,19 +3,53 @@ package v1.vault;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/cmrd-a/GophKeeper/gen/proto/v1/vault;vault";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "GophKeeper API";
+    version: "1.0.0";
+    description: "GophKeeper password manager API";
+  };
+  security_definitions: {
+    security: {
+      key: "Bearer";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "Authorization";
+        description: "Enter your bearer token in the format: Bearer {token}";
+      }
+    }
+  }
+};
 
 // VaultService service definition
 service VaultService {
   rpc GetVaultItems(GetVaultItemsRequest) returns (GetVaultItemsResponse) {
     option (google.api.http) = {get: "/api/v1/vault/items"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
   }
 
   rpc SaveLoginPassword(SaveLoginPasswordRequest) returns (SaveLoginPasswordResponse) {
     option (google.api.http) = {
       post: "/api/v1/vault/login-password"
       body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
     };
   }
 
@@ -24,12 +58,26 @@ service VaultService {
       post: "/api/v1/vault/text"
       body: "*"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
   }
 
   rpc SaveBinaryData(SaveBinaryDataRequest) returns (SaveBinaryDataResponse) {
     option (google.api.http) = {
       post: "/api/v1/vault/binary"
       body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
     };
   }
 
@@ -38,6 +86,13 @@ service VaultService {
       post: "/api/v1/vault/card"
       body: "*"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
   }
 
   rpc SaveMeta(SaveMetaRequest) returns (SaveMetaResponse) {
@@ -45,10 +100,24 @@ service VaultService {
       post: "/api/v1/vault/meta"
       body: "*"
     };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
   }
 
   rpc DeleteVaultItem(DeleteVaultItemRequest) returns (DeleteVaultItemResponse) {
     option (google.api.http) = {delete: "/api/v1/vault/item/{id}"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "Bearer";
+        }
+      }
+    };
   }
 }
 
